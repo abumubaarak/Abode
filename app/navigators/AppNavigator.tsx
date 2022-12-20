@@ -17,6 +17,7 @@ import React from "react"
 import { useColorScheme } from "react-native"
 import Config from "../config"
 import {
+  AuthenticationScreen,
   InboxScreen,
   PaymentScreen,
   ProfileScreen,
@@ -44,6 +45,8 @@ export type AppStackParamList = {
   Welcome: undefined,
   Home: NavigatorScreenParams<HomeNavigatorParamList>, // @demo remove-current-line
   Payment: undefined,
+  Authentication: { user: String }
+
 
   // 🔥 Your screens go here
 }
@@ -68,6 +71,14 @@ const AppStack = observer(function AppStack() {
       screenOptions={{ headerShown: false }}
     >
       <Stack.Screen name="Home" component={HomeNavigator} />
+      <Stack.Group screenOptions={{
+        presentation: 'fullScreenModal'
+
+      }}>
+        <Stack.Screen name="Authentication"
+          initialParams={{ user: "tenant" }}
+          component={AuthenticationScreen} />
+      </Stack.Group>
     </Stack.Navigator>
   )
 })

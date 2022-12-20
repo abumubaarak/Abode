@@ -1,4 +1,3 @@
-// TODO: write documentation for colors and palette in own markdown file and add links from here
 
 const palette = {
   neutral100: "#FFFFFF",
@@ -11,18 +10,22 @@ const palette = {
   neutral800: "#191015",
   neutral900: "#000000",
 
-  primary100: "#F4E0D9",
-  primary200: "#E8C1B4",
-  primary300: "#DDA28E",
-  primary400: "#D28468",
-  primary500: "#C76542",
-  primary600: "#A54F31",
+  primary100: '#fab1ff',
+  primary200: '#f37fff',
+  primary300: '#ee4cff',
+  primary400: '#e81aff',
+  primary500: '#ce00e6',
+  primary600: '#a000b4',
 
-  secondary100: "#DCDDE9",
-  secondary200: "#BCC0D6",
-  secondary300: "#9196B9",
-  secondary400: "#626894",
-  secondary500: "#41476E",
+  secondary50: '#d9faff',
+  secondary100: '#adeaff',
+  secondary200: '#7ddbff',
+  secondary300: '#4dcdff',
+  secondary400: '#24befe',
+  secondary500: '#12a5e5',
+  secondary600: '#0080b3',
+
+  black: "#000",
 
   accent100: "#FFEED4",
   accent200: "#FFE1B2",
@@ -75,6 +78,7 @@ export const colors = {
   /**
    * Error messages.
    */
+  black: palette.black,
   error: palette.angry500,
   /**
    * Error Background.
