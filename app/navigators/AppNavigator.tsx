@@ -8,6 +8,7 @@ import {
   DarkTheme,
   DefaultTheme,
   NavigationContainer,
+  NavigatorScreenParams,
 } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { StackScreenProps } from "@react-navigation/stack"
@@ -16,8 +17,14 @@ import React from "react"
 import { useColorScheme } from "react-native"
 import Config from "../config"
 import {
+  InboxScreen,
+  PaymentScreen,
+  ProfileScreen,
+  SearchScreen,
   WelcomeScreen,
+  WishlistScreen,
 } from "../screens"
+import { HomeNavigator, HomeNavigatorParamList } from "./HomeNavigator"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
 
 /**
@@ -34,7 +41,10 @@ import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
  *   https://reactnavigation.org/docs/typescript/#organizing-types
  */
 export type AppStackParamList = {
-  Welcome: undefined
+  Welcome: undefined,
+  Home: NavigatorScreenParams<HomeNavigatorParamList>, // @demo remove-current-line
+  Payment: undefined,
+
   // 🔥 Your screens go here
 }
 
@@ -57,13 +67,12 @@ const AppStack = observer(function AppStack() {
     <Stack.Navigator
       screenOptions={{ headerShown: false }}
     >
-          <Stack.Screen name="Welcome" component={WelcomeScreen} />
-      {/** 🔥 Your screens go here */}
+      <Stack.Screen name="Home" component={HomeNavigator} />
     </Stack.Navigator>
   )
 })
 
-interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> {}
+interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> { }
 
 export const AppNavigator = observer(function AppNavigator(props: NavigationProps) {
   const colorScheme = useColorScheme()
