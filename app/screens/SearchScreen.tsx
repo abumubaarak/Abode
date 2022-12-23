@@ -5,7 +5,6 @@ import { StackScreenProps } from "@react-navigation/stack"
 import { AppStackScreenProps, HomeTabScreenProps } from "../navigators"
 import { Button, Icon, Screen, Text } from "../components"
 import { Ionicons } from '@expo/vector-icons';
-import BottomSheet from "@gorhom/bottom-sheet"
 import { colors, spacing } from "../theme"
 import { useNavigation } from "@react-navigation/native"
 import Ripple from 'react-native-material-ripple';

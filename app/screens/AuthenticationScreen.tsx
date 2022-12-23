@@ -1,22 +1,27 @@
-import React, { FC } from "react"
+import React, { FC, useState, useEffect } from "react"
 import { observer } from "mobx-react-lite"
-import { TextStyle, View, ViewStyle } from "react-native"
+import { ActivityIndicator, TextStyle, View, ViewStyle } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { AppStackParamList, AppStackScreenProps } from "../navigators"
 import { Button, Header, Icon, Screen, Text } from "../components"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { colors, spacing } from "../theme"
 import { FontAwesome } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons';
+import auth from '@react-native-firebase/auth';
+
+import { createUser, onGoogleButtonPress } from "../utils/firebase"
 import LinearGradient from 'react-native-linear-gradient';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { useStores } from "../models"
+import { saveString } from "../utils/storage"
 
-// import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "../models"
-
-
+GoogleSignin.configure({
+  scopes: ['https://www.googleapis.com/auth/drive.readonly'],
+  webClientId: '980427352092-vaihpt46rgqge0vns0ctne7ql9qoajmt.apps.googleusercontent.com',
+});
 export const AuthenticationScreen: FC<AppStackScreenProps<"Authentication">> = observer(function AuthenticationScreen() {
   // Pull in one of our MST stores
-  // const { someStore, anotherStore } = useStores()
+  const [isLoading, setLoading] = useState<boolean>(false)
 
 
   const navigation = useNavigation()
@@ -27,7 +32,18 @@ export const AuthenticationScreen: FC<AppStackScreenProps<"Authentication">> = o
   const subHeaderTilte = params.user == "landlord" ?
     `Abode matches you with the right tenants looking to rent a room or apartment like yours in a matter of days.` :
     `We are the solution for those of you who are looking for their next rent anywhere`
-  console.log(params.user)
+  saveString("userType", params.user.toString())
+
+  useEffect(() => {
+    if (auth().currentUser?.uid != null) {
+      navigation.goBack()
+    }
+  }, [auth().currentUser?.uid])
+
+  const continueWithGoogle = () => {
+    setLoading(true)
+    onGoogleButtonPress(params.user).then(() => setLoading(false))
+  }
   return (
     <Screen style={$root} preset="fixed">
 
@@ -54,42 +70,21 @@ export const AuthenticationScreen: FC<AppStackScreenProps<"Authentication">> = o
           style={$weAre} />
         <View
           style={$buttonGroup}>
+
           <Button
-            LeftAccessory={(props) => <Icon icon="google" size={24} />}
+            LeftAccessory={(props) =>
+              isLoading ? <ActivityIndicator animating={isLoading} size="small"
+                color={colors.palette.primary300} /> : <Icon icon="google" size={24} />}
             text="Continue with Google"
             preset="default"
+            disabled={isLoading}
+            onPress={continueWithGoogle}
             textStyle={[$authText, { color: colors.black }]}
             style={$authButton} />
-          {/* <AppleAuthentication.AppleAuthenticationButton
-            buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
-            buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
-            cornerRadius={5}
-            style={{
-              width: 200,
-              height: 44
-            }}
-
-            onPress={async () => {
-              try {
-                const credential = await AppleAuthentication.signInAsync({
-                  requestedScopes: [
-                    AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
-                    AppleAuthentication.AppleAuthenticationScope.EMAIL,
-                  ],
-                });
-                // signed in
-              } catch (e) {
-                if (e.code === 'ERR_CANCELED') {
-                  // handle that the user canceled the sign-in flow
-                } else {
-                  // handle other errors
-                }
-              }
-            }}
-          /> */}
           <Button
             LeftAccessory={(props) => <FontAwesome name="apple" size={24} color="white" />}
             text="Continue with Apple" preset="default"
+            disabled={isLoading}
             textStyle={[$authText, { color: colors.background }]}
             style={[$authButton, { backgroundColor: "black", borderWidth: 0 }]}
           />
@@ -145,7 +140,6 @@ const $buttonGroup: ViewStyle = {
   flex: 1,
   justifyContent: "flex-end",
   alignItems: "center",
-
   marginVertical: spacing.extraLarge
 }
 const $authButton: ViewStyle = {
