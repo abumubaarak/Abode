@@ -48,7 +48,7 @@ export const AuthenticationScreen: FC<AppStackScreenProps<"Authentication">> = o
     <Screen style={$root} preset="fixed">
 
       <LinearGradient
-        colors={[colors.palette.secondary400, colors.palette.primary400]}
+        colors={[colors?.palette.secondary400, colors?.palette.primary400]}
         start={{ x: 0.1, y: 0 }}
         end={{ x: 0.1, y: 0.9 }}
         style={$gradientStyle}
@@ -74,18 +74,18 @@ export const AuthenticationScreen: FC<AppStackScreenProps<"Authentication">> = o
           <Button
             LeftAccessory={(props) =>
               isLoading ? <ActivityIndicator animating={isLoading} size="small"
-                color={colors.palette.primary300} /> : <Icon icon="google" size={24} />}
+                color={colors?.palette.primary300} /> : <Icon icon="google" size={24} />}
             text="Continue with Google"
             preset="default"
             disabled={isLoading}
             onPress={continueWithGoogle}
-            textStyle={[$authText, { color: colors.black }]}
+            textStyle={[$authText, { color: colors?.black }]}
             style={$authButton} />
           <Button
             LeftAccessory={(props) => <FontAwesome name="apple" size={24} color="white" />}
             text="Continue with Apple" preset="default"
             disabled={isLoading}
-            textStyle={[$authText, { color: colors.background }]}
+            textStyle={[$authText, { color: colors?.background }]}
             style={[$authButton, { backgroundColor: "black", borderWidth: 0 }]}
           />
 
@@ -97,7 +97,7 @@ export const AuthenticationScreen: FC<AppStackScreenProps<"Authentication">> = o
 
 const $root: ViewStyle = {
   flex: 1,
-  backgroundColor: colors.background
+  backgroundColor: colors?.background
 }
 const $gradientStyle: ViewStyle = {
   flex: 1,
@@ -113,7 +113,7 @@ const $closeIcon: ViewStyle = {
   marginTop: spacing.huge
 }
 const $bottomSheet: ViewStyle = {
-  backgroundColor: colors.background,
+  backgroundColor: colors?.background,
   paddingVertical: spacing.large,
   paddingHorizontal: spacing.medium,
   flexBasis: "50%"
@@ -125,7 +125,7 @@ const $dicover: TextStyle = {
   letterSpacing: 2
 }
 const $weAre: TextStyle = {
-  color: colors.textDim,
+  color: colors?.textDim,
   fontSize: 14,
   paddingVertical: spacing.medium,
   textAlign: "center",
@@ -152,7 +152,7 @@ const $authButton: ViewStyle = {
 const $closeView: ViewStyle = {
   height: 40,
   width: 40,
-  backgroundColor: colors.palette.secondary50,
+  backgroundColor: colors?.palette.secondary50,
   borderRadius: 100,
   justifyContent: "center",
   alignItems: "center"
