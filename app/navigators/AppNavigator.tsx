@@ -13,10 +13,13 @@ import {
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { useColorScheme } from "react-native"
 import Config from "../config"
+import firestore from '@react-native-firebase/firestore';
+import { useStores } from "../models"
 import {
+  AuthenticationScreen,
   InboxScreen,
   PaymentScreen,
   ProfileScreen,
@@ -26,6 +29,7 @@ import {
 } from "../screens"
 import { HomeNavigator, HomeNavigatorParamList } from "./HomeNavigator"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
+import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -44,6 +48,8 @@ export type AppStackParamList = {
   Welcome: undefined,
   Home: NavigatorScreenParams<HomeNavigatorParamList>, // @demo remove-current-line
   Payment: undefined,
+  Authentication: { user: String }
+
 
   // 🔥 Your screens go here
 }
@@ -63,11 +69,34 @@ export type AppStackScreenProps<T extends keyof AppStackParamList> = StackScreen
 const Stack = createNativeStackNavigator<AppStackParamList>()
 
 const AppStack = observer(function AppStack() {
+
+  const [initializing, setInitializing] = useState(true);
+
+  function onAuthStateChanged(user: FirebaseAuthTypes.User) {
+    if (initializing) {
+      setInitializing(false)
+    }
+  }
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
+
+
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false }}
     >
       <Stack.Screen name="Home" component={HomeNavigator} />
+      <Stack.Group screenOptions={{
+        presentation: 'fullScreenModal'
+
+      }}>
+        <Stack.Screen name="Authentication"
+          initialParams={{ user: "tenant" }}
+          component={AuthenticationScreen} />
+      </Stack.Group>
     </Stack.Navigator>
   )
 })

@@ -1,16 +1,18 @@
+$RNFirebaseAsStaticFramework = true
 pod_folder = Pathname.new(__FILE__).dirname.realpath
 
 require File.join(File.dirname(`cd #{pod_folder} && node --print "require.resolve('expo/package.json')"`), "scripts/autolinking")
 require File.join(File.dirname(`cd #{pod_folder} && node --print "require.resolve('react-native/package.json')"`), "scripts/react_native_pods")
 require File.join(File.dirname(`cd #{pod_folder} && node --print "require.resolve('@react-native-community/cli-platform-ios/package.json')"`), "native_modules")
 
-platform :ios, '12.4'
+platform :ios, '13.0'
 install! 'cocoapods', :deterministic_uuids => false
 
 production = ENV["PRODUCTION"] == "1"
 
 target 'Abode' do
   use_expo_modules!
+  pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
   post_integrate do |installer|
     begin
       expo_patch_react_imports!(installer)
@@ -22,7 +24,11 @@ target 'Abode' do
 
   # Flags change depending on the env values.
   flags = get_default_flags()
-
+  # ==> added: Begin
+  pod 'Firebase', :modular_headers => true
+  pod 'FirebaseCore', :modular_headers => true
+  pod 'GoogleUtilities', :modular_headers => true
+  # ==> added: End
   use_react_native!(
     :path => config[:reactNativePath],
     :production => production,
