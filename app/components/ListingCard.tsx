@@ -11,52 +11,56 @@ export interface ListingCardProps {
   /**
    * An optional style override useful for padding & margin.
    */
-  style?: StyleProp<ViewStyle>
+  style?: StyleProp<ViewStyle>,
+  item: any
 }
 
 const RADIUS = 10
 
-export const ListingCard = observer(function ListingCard(_: ListingCardProps) {
-  const gallery = require("../../assets/images/08.jpg")
+export const ListingCard = observer(function ListingCard(props: ListingCardProps) {
+  const { item } = props
+  const data = item
+  console.log("item")
 
   return (
     <Card
       preset="default"
       verticalAlignment="space-between"
       style={$container}
-      HeadingComponent={<Image source={gallery} style={$cardImage} />}
+      HeadingComponent={<Image source={{ uri: data.remoteImages[0] }} style={$cardImage} />}
       ContentComponent={
         <View style={$contentContainer}>
           <Text
             style={$labelHeading}
-            text="Modern Apartment With A Lot Of Space And Direct View Of The Naschmarkt"
+            text={data.name}
             numberOfLines={1}
           />
 
           <Text
             style={$labelSubHeading}
-            text="Rechte Wienzeile 5, 1040 Vienna, Austria"
+            text={data.address}
             numberOfLines={1}
           />
 
           <View style={$tagContainer}>
             <ListingAmentiesTag
-              label="3 Bed"
+              label={`${data.avaliableBedroom} Bed`}
               icon={<Ionicons name="ios-bed" size={16} color={colors.gray100} />}
             />
+
             <ListingAmentiesTag
-              label="4 Bath"
+              label={`${data.avaliableBathroom} Bath`}
               icon={<MaterialCommunityIcons name="bathtub-outline" size={16} color={colors.gray100} />}
             />
 
             <ListingAmentiesTag
-              label="1540 sqft"
+              label={`${data.propertySize} sqft`}
               icon={<MaterialCommunityIcons name="set-square" size={16} color={colors.gray100} />}
             />
           </View>
 
           <View style={$priceContainer}>
-            <Text text="$12,500" style={$priceLabel} />
+            <Text text={`$${data.cost}`} style={$priceLabel} />
             <Text style={$pricePer} text=" / year" />
           </View>
         </View>

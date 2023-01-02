@@ -1,16 +1,27 @@
+import { collection, query } from "firebase/firestore"
 import { observer } from "mobx-react-lite"
-import React, { FC } from "react"
+import React, { FC, useEffect } from "react"
 import { Dimensions, ImageBackground, ImageStyle, TextStyle, View, ViewStyle } from "react-native"
 import Ripple from "react-native-material-ripple"
 import Carousel from "react-native-snap-carousel"
 import { FeaturedImage, Icon, ListingCard, Screen, Text } from "../components"
+import useFirestore from '../hooks/useFirestore'
 import { HomeTabScreenProps } from "../navigators"
 import { colors, spacing, typography } from "../theme"
-
+import { firestoreQuery } from "../utils/firebase"
 
 const HORIZONTAL_MARGIN = 15
 
 export const SearchScreen: FC<HomeTabScreenProps<"Search">> = observer(function SearchScreen() {
+  const ref = query(
+    collection(firestoreQuery, "Property"),
+  );
+  const { getCollection, data, isLoading } = useFirestore()
+  //const { data, isLoading, error } = useFirestoreQuery(["Property"], ref);
+
+  useEffect(() => {
+    getCollection("Property")
+  }, [])
 
   const sliderWidth = Dimensions.get("window").width
   const itemWidth = sliderWidth - 100 + HORIZONTAL_MARGIN * 2
@@ -36,7 +47,8 @@ export const SearchScreen: FC<HomeTabScreenProps<"Search">> = observer(function 
 
       <View style={$recomContainer}>
         <Text text="Recommeded" style={$label} />
-        <Carousel
+        {isLoading && <Text text="Loading..." />}
+        {!isLoading && <Carousel
           vertical={false}
           sliderWidth={sliderWidth}
           itemWidth={itemWidth}
@@ -44,17 +56,18 @@ export const SearchScreen: FC<HomeTabScreenProps<"Search">> = observer(function 
           inactiveSlideScale={1}
           containerCustomStyle={$carouselContainer}
           inactiveSlideOpacity={1}
-          data={[...new Array(5).keys()]}
-          renderItem={(_) => (
+          data={data}
+          renderItem={({ item, index }) => (
             <View
               style={$listingCard}
             >
               <Ripple>
-                <ListingCard />
+                <ListingCard item={item} />
               </Ripple>
             </View>
           )}
-        />
+        />}
+
         <Text text="Featured cities" style={[$label, { paddingTop: 36 }]} />
 
         <View style={$featuredContainer}>

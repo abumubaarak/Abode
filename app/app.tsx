@@ -9,19 +9,23 @@
  * The app navigation resides in ./app/navigators, so head over there
  * if you're interested in adding screens and navigators.
  */
-import "./i18n"
-import "./utils/ignoreWarnings"
-import { useFonts } from "expo-font"
-import React from "react"
-import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
-import * as Linking from "expo-linking"
-import { useInitialRootStore } from "./models"
-import { AppNavigator, useNavigationPersistence } from "./navigators"
-import { ErrorBoundary } from "./screens/ErrorScreen/ErrorBoundary"
-import * as storage from "./utils/storage"
-import { customFontsToLoad } from "./theme"
-import { setupReactotron } from "./services/reactotron"
-import Config from "./config"
+
+import { useFonts } from "expo-font";
+
+import "./i18n";
+import "./utils/ignoreWarnings";
+
+
+import * as Linking from "expo-linking";
+import React from "react";
+import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context";
+import Config from "./config";
+import { useInitialRootStore } from "./models";
+import { AppNavigator, useNavigationPersistence } from "./navigators";
+import { ErrorBoundary } from "./screens/ErrorScreen/ErrorBoundary";
+import { setupReactotron } from "./services/reactotron";
+import { customFontsToLoad } from "./theme";
+import * as storage from "./utils/storage";
 
 // Set up Reactotron, which is a free desktop app for inspecting and debugging
 // React Native apps. Learn more here: https://github.com/infinitered/reactotron
@@ -101,15 +105,19 @@ function App(props: AppProps) {
     config,
   }
 
-  // otherwise, we're ready to render the app
+
+
+
   return (
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
       <ErrorBoundary catchErrors={Config.catchErrors}>
+
         <AppNavigator
           linking={linking}
           initialState={initialNavigationState}
           onStateChange={onNavigationStateChange}
         />
+
       </ErrorBoundary>
     </SafeAreaProvider>
   )
