@@ -9,7 +9,7 @@ import {
   DarkTheme,
   DefaultTheme,
   NavigationContainer,
-  NavigatorScreenParams
+  NavigatorScreenParams,
 } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { StackScreenProps } from "@react-navigation/stack"
@@ -17,9 +17,8 @@ import { observer } from "mobx-react-lite"
 import React, { useEffect, useState } from "react"
 import { useColorScheme } from "react-native"
 import Config from "../config"
-import {
-  AuthenticationScreen
-} from "../screens"
+import { AuthenticationScreen, ListingDetailsScreen } from "../screens"
+import { colors } from "../theme"
 import { HomeNavigator, HomeNavigatorParamList } from "./HomeNavigator"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
 
@@ -41,6 +40,7 @@ export type AppStackParamList = {
   Home: NavigatorScreenParams<HomeNavigatorParamList> // @demo remove-current-line
   Payment: undefined
   Authentication: { user: string }
+  ListingDetails: { id: string }
 
   // 🔥 Your screens go here
 }
@@ -76,6 +76,17 @@ const AppStack = observer(function AppStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Home" component={HomeNavigator} />
+      <Stack.Screen
+        name="ListingDetails"
+        options={{
+          headerShown: true,
+          headerTransparent: true,
+          headerTitle: "",
+          headerBackTitleVisible: false,
+          headerTintColor: colors.black,
+        }}
+        component={ListingDetailsScreen}
+      />
       <Stack.Group
         screenOptions={{
           presentation: "fullScreenModal",
@@ -91,7 +102,7 @@ const AppStack = observer(function AppStack() {
   )
 })
 
-interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> { }
+interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> {}
 
 export const AppNavigator = observer(function AppNavigator(props: NavigationProps) {
   const colorScheme = useColorScheme()
