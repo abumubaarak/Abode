@@ -1,6 +1,6 @@
 export type UserInfo = {
-    displayName: String,
-    email: String,
-    uid: String,
-    userType: String
+  displayName: string
+  email: string
+  uid: string
+  userType: string
 }

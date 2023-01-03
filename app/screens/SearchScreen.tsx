@@ -1,70 +1,151 @@
-import React, { FC, useCallback, useMemo, useRef } from "react"
+import { collection, query } from "firebase/firestore"
 import { observer } from "mobx-react-lite"
-import { ViewStyle, View, TextStyle, Platform } from "react-native"
-import { StackScreenProps } from "@react-navigation/stack"
-import { AppStackScreenProps, HomeTabScreenProps } from "../navigators"
-import { Button, Icon, Screen, Text } from "../components"
-import { Ionicons } from '@expo/vector-icons';
-import { colors, spacing } from "../theme"
-import { useNavigation } from "@react-navigation/native"
-import Ripple from 'react-native-material-ripple';
+import React, { FC, useEffect } from "react"
+import { Dimensions, ImageBackground, ImageStyle, TextStyle, View, ViewStyle } from "react-native"
+import Ripple from "react-native-material-ripple"
+import Carousel from "react-native-snap-carousel"
+import { FeaturedImage, Icon, ListingCard, Screen, Text } from "../components"
+import useFirestore from '../hooks/useFirestore'
+import { HomeTabScreenProps } from "../navigators"
+import { colors, spacing, typography } from "../theme"
+import { firestoreQuery } from "../utils/firebase"
 
-// import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "../models"
-
-
+const HORIZONTAL_MARGIN = 15
 
 export const SearchScreen: FC<HomeTabScreenProps<"Search">> = observer(function SearchScreen() {
-  // Pull in one of our MST stores
-  // const { someStore, anotherStore } = useStores()
+  const ref = query(
+    collection(firestoreQuery, "Property"),
+  );
+  const { getCollection, data, isLoading } = useFirestore()
+  //const { data, isLoading, error } = useFirestoreQuery(["Property"], ref);
 
-  // Pull in navigation via hook
-  const navigation = useNavigation()
+  useEffect(() => {
+    getCollection("Property")
+  }, [])
 
-  function popAuthenticationScreen() {
-    navigation.navigate("Authentication", { user: "landlord" })
-  }
+  const sliderWidth = Dimensions.get("window").width
+  const itemWidth = sliderWidth - 100 + HORIZONTAL_MARGIN * 2
+
+  const bannerTop = require("../../assets/images/09.jpg")
+  const berlin = require("../../assets/images/berlin.jpg")
+  const london = require("../../assets/images/london.jpg")
+  const paris = require("../../assets/images/paris.jpg")
+  const dubai = require("../../assets/images/dubai.jpg")
+
 
   return (
-    <Screen style={$root} preset="scroll" safeAreaEdges={["top"]}>
-      <Text text="search" />
-      <View style={$landlordCallout}>
-        <Text style={$landlordCalloutLabel} text={`Got a room or an apartment to rent \n out?`} />
-        {Platform.OS == "ios" ?
-          <Button style={{ width: "60%" }}
-            preset="default"
-            text="Publish a listing"
-            onPress={popAuthenticationScreen}
-            LeftAccessory={(props) => (
-              <Ionicons name="add" size={27} color="black" />
-            )}
-          />
-          : <Ripple onPress={popAuthenticationScreen}>
-            <Button style={{ width: "60%" }}
-              preset="default"
-              text="Publish a listing"
-              LeftAccessory={(props) => (
-                <Ionicons name="add" size={27} color="black" />
-              )}
-            />
-          </Ripple>}
+    <Screen style={$root} preset="auto">
+      <ImageBackground style={$banner} resizeMode="cover" source={bannerTop}>
+        <Text text={`Discover a place \nyou'll love to live`} style={$bannerLabel} />
+        <View style={$searchContainer}>
+          <View style={$search}>
+            <Icon icon="search" style={$searchIcon} />
+            <Text text="Search Location" style={$searchLabel} />
+          </View>
+        </View>
+      </ImageBackground>
 
+      <View style={$recomContainer}>
+        <Text text="Recommeded" style={$label} />
+        {isLoading && <Text text="Loading..." />}
+        {!isLoading && <Carousel
+          vertical={false}
+          sliderWidth={sliderWidth}
+          itemWidth={itemWidth}
+          activeSlideAlignment="start"
+          inactiveSlideScale={1}
+          containerCustomStyle={$carouselContainer}
+          inactiveSlideOpacity={1}
+          data={data}
+          renderItem={({ item, index }) => (
+            <View
+              style={$listingCard}
+            >
+              <Ripple>
+                <ListingCard item={item} />
+              </Ripple>
+            </View>
+          )}
+        />}
 
+        <Text text="Featured cities" style={[$label, { paddingTop: 36 }]} />
+
+        <View style={$featuredContainer}>
+          <FeaturedImage image={dubai} text="Dubai" />
+          <FeaturedImage image={london} text="London" />
+        </View>
+        <View style={[$featuredContainer, { marginTop: 10 }]}>
+          <FeaturedImage image={paris} text="Paris" />
+          <FeaturedImage image={berlin} text="Berlin" />
+        </View>
       </View>
     </Screen>
   )
 })
+const $label: TextStyle = {
+  opacity: 0.9,
+  fontSize: 20,
+  fontFamily: typography.primary.semiBold,
+  paddingBottom: 14,
+}
+
 
 const $root: ViewStyle = {
   flex: 1,
 }
-const $landlordCallout: ViewStyle = {
-  flex: 1,
-  marginTop: spacing.extraLarge,
-  alignItems: "center",
+const $banner: ViewStyle = {
+  paddingTop: 130,
+  paddingHorizontal: spacing.medium,
+  justifyContent: "flex-end",
 }
-const $landlordCalloutLabel: TextStyle = {
-  textAlign: "center",
-  paddingBottom: spacing.medium
+
+const $bannerLabel: TextStyle = {
+  color: colors.white,
+  fontSize: 32,
+  paddingBottom: 40,
+  lineHeight: 38,
+  fontFamily: typography.primary.bold,
+  letterSpacing: 0.4,
+}
+const $searchContainer: ViewStyle = {
+  marginBottom: 30,
+}
+
+const $search: ViewStyle = {
+  paddingHorizontal: spacing.small,
+  flexDirection: "row",
+  alignItems: "center",
+  height: 50,
+  borderRadius: 7,
+  backgroundColor: colors.white,
+}
+const $searchIcon: ImageStyle = {
+  opacity: 0.4,
+}
+const $searchLabel: TextStyle = {
+  paddingLeft: 8,
+  opacity: 0.4,
+  fontFamily: typography.primary.light,
+}
+const $recomContainer: ViewStyle = {
+  marginTop: 35,
+  paddingHorizontal: spacing.medium,
+  marginRight: 10,
+  marginBottom: 30,
+}
+
+const $listingCard: ViewStyle = {
+  paddingRight: HORIZONTAL_MARGIN,
+  backgroundColor: colors.transparent,
+  paddingBottom: 4,
+}
+const $featuredContainer: ViewStyle = {
+  justifyContent: "space-between",
+  flexDirection: "row",
+  flex: 1,
+}
+const $carouselContainer: ViewStyle = {
+
+  overflow: "visible",
 
 }
