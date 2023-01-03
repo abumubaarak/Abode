@@ -83,7 +83,7 @@ export const colors = {
   white: "#fff",
   black: "#000",
   lightgrey: "#e1e1e1",
-  gray: "gray",
+  gray: "#959595",
   gray50: "#c6c6c6",
   gray100: "#636167",
 

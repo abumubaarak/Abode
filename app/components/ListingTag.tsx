@@ -18,9 +18,7 @@ export interface ListingAmentiesTagProps {
 /**
  * Describe your component here
  */
-export const ListingAmentiesTag = observer(function ListingAmentiesTag(
-  props: ListingAmentiesTagProps,
-) {
+export const ListingTag = observer(function ListingAmentiesTag(props: ListingAmentiesTagProps) {
   const { label, icon } = props
 
   return (

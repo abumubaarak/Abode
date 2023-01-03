@@ -1,23 +1,19 @@
-import { collection, query } from "firebase/firestore"
 import { observer } from "mobx-react-lite"
 import React, { FC, useEffect } from "react"
 import { Dimensions, ImageBackground, ImageStyle, TextStyle, View, ViewStyle } from "react-native"
-import Ripple from "react-native-material-ripple"
 import Carousel from "react-native-snap-carousel"
 import { FeaturedImage, Icon, ListingCard, Screen, Text } from "../components"
-import useFirestore from '../hooks/useFirestore'
+import useFirestore from "../hooks/useFirestore"
 import { HomeTabScreenProps } from "../navigators"
 import { colors, spacing, typography } from "../theme"
-import { firestoreQuery } from "../utils/firebase"
 
 const HORIZONTAL_MARGIN = 15
 
 export const SearchScreen: FC<HomeTabScreenProps<"Search">> = observer(function SearchScreen() {
-  const ref = query(
-    collection(firestoreQuery, "Property"),
-  );
+
   const { getCollection, data, isLoading } = useFirestore()
-  //const { data, isLoading, error } = useFirestoreQuery(["Property"], ref);
+  // const { data, isLoading, error } = useFirestoreQuery(["Property"], ref);
+
 
   useEffect(() => {
     getCollection("Property")
@@ -31,7 +27,6 @@ export const SearchScreen: FC<HomeTabScreenProps<"Search">> = observer(function 
   const london = require("../../assets/images/london.jpg")
   const paris = require("../../assets/images/paris.jpg")
   const dubai = require("../../assets/images/dubai.jpg")
-
 
   return (
     <Screen style={$root} preset="auto">
@@ -48,25 +43,23 @@ export const SearchScreen: FC<HomeTabScreenProps<"Search">> = observer(function 
       <View style={$recomContainer}>
         <Text text="Recommeded" style={$label} />
         {isLoading && <Text text="Loading..." />}
-        {!isLoading && <Carousel
-          vertical={false}
-          sliderWidth={sliderWidth}
-          itemWidth={itemWidth}
-          activeSlideAlignment="start"
-          inactiveSlideScale={1}
-          containerCustomStyle={$carouselContainer}
-          inactiveSlideOpacity={1}
-          data={data}
-          renderItem={({ item, index }) => (
-            <View
-              style={$listingCard}
-            >
-              <Ripple>
+        {!isLoading && (
+          <Carousel
+            vertical={false}
+            sliderWidth={sliderWidth}
+            itemWidth={itemWidth}
+            activeSlideAlignment="start"
+            inactiveSlideScale={1}
+            containerCustomStyle={$carouselContainer}
+            inactiveSlideOpacity={1}
+            data={data}
+            renderItem={({ item }) => (
+              <View style={$listingCard}>
                 <ListingCard item={item} />
-              </Ripple>
-            </View>
-          )}
-        />}
+              </View>
+            )}
+          />
+        )}
 
         <Text text="Featured cities" style={[$label, { paddingTop: 36 }]} />
 
@@ -88,7 +81,6 @@ const $label: TextStyle = {
   fontFamily: typography.primary.semiBold,
   paddingBottom: 14,
 }
-
 
 const $root: ViewStyle = {
   flex: 1,
@@ -145,7 +137,5 @@ const $featuredContainer: ViewStyle = {
   flex: 1,
 }
 const $carouselContainer: ViewStyle = {
-
   overflow: "visible",
-
 }
