@@ -15,7 +15,7 @@ const firebaseConfig = initializeApp({
 
 export const firestoreQuery = getFirestore(firebaseConfig)
 
-export async function onGoogleButtonPress(userType: string) {
+export async function onGoogleButtonPress() {
   // Check if your device supports Google Play
   await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true })
   // Get the users ID token
@@ -27,17 +27,30 @@ export async function onGoogleButtonPress(userType: string) {
   // Sign-in the user with the credential
   return auth()
     .signInWithCredential(googleCredential)
-    .then(() => createUser(userType))
+    .then(() => createUser())
 }
 
-export const createUser = (userType: string) => {
-  firestore().collection("Users").doc(auth().currentUser.uid).set({
+export const createUser = () => {
+  firestore().collection(USERS).doc(auth().currentUser.uid).set({
     displayName: auth().currentUser.displayName,
     email: auth().currentUser.email,
     uid: auth().currentUser.uid,
-    userType,
+    userType: "tenant",
   })
+}
+
+export const addWishlist = (propertyId: string) => {
+  const wishlistDocument = firestore().collection(WISHLISTS).doc()
+  wishlistDocument.set({
+    id: wishlistDocument.id,
+    propertyId,
+    uid: auth().currentUser.uid,
+  })
+}
+export const removeWishlist = (docID: string) => {
+  firestore().collection(WISHLISTS).doc(docID).delete()
 }
 
 export const PROPERTY = "Property"
 export const USERS = "Users"
+export const WISHLISTS = "Wishlists"

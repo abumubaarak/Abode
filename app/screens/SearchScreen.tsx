@@ -10,10 +10,8 @@ import { colors, spacing, typography } from "../theme"
 const HORIZONTAL_MARGIN = 15
 
 export const SearchScreen: FC<HomeTabScreenProps<"Search">> = observer(function SearchScreen() {
-
   const { getCollection, data, isLoading } = useFirestore()
   // const { data, isLoading, error } = useFirestoreQuery(["Property"], ref);
-
 
   useEffect(() => {
     getCollection("Property")
