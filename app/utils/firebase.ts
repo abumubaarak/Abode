@@ -53,4 +53,5 @@ export const removeWishlist = (docID: string) => {
 
 export const PROPERTY = "Property"
 export const USERS = "Users"
+export const REQUEST = "Request"
 export const WISHLISTS = "Wishlists"

@@ -10,14 +10,16 @@ import {
   DefaultTheme,
   NavigationContainer,
   NavigatorScreenParams,
+  useNavigation
 } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import React, { useEffect, useState } from "react"
 import { useColorScheme } from "react-native"
+import { Icon } from "../components"
 import Config from "../config"
-import { AuthenticationScreen, ListingDetailsScreen } from "../screens"
+import { ApplyScreen, AuthenticationScreen, ListingDetailsScreen } from "../screens"
 import { colors } from "../theme"
 import { HomeNavigator, HomeNavigatorParamList } from "./HomeNavigator"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
@@ -41,6 +43,7 @@ export type AppStackParamList = {
   Payment: undefined
   Authentication: undefined
   ListingDetails: { id: string }
+  Apply: { lid: string; pName: string; address: string; uid: string; pId: string, hasApplied: React.Dispatch<React.SetStateAction<boolean>> }
 
   // 🔥 Your screens go here
 }
@@ -61,6 +64,7 @@ const Stack = createNativeStackNavigator<AppStackParamList>()
 
 const AppStack = observer(function AppStack() {
   const [initializing, setInitializing] = useState(true)
+  const navigation = useNavigation()
 
   function onAuthStateChanged() {
     if (initializing) {
@@ -80,6 +84,7 @@ const AppStack = observer(function AppStack() {
         name="ListingDetails"
         options={{
           headerShown: true,
+          animation: "slide_from_right",
           headerTransparent: true,
           headerTitle: "",
           headerBackTitleVisible: false,
@@ -90,15 +95,24 @@ const AppStack = observer(function AppStack() {
       <Stack.Group
         screenOptions={{
           presentation: "fullScreenModal",
+          animation: "slide_from_bottom",
         }}
       >
         <Stack.Screen name="Authentication" component={AuthenticationScreen} />
+        <Stack.Screen
+          name="Apply"
+          component={ApplyScreen}
+          options={{
+            headerShown: false,
+            headerRight: () => <Icon icon="x" onPress={() => navigation.goBack()} />,
+          }}
+        />
       </Stack.Group>
     </Stack.Navigator>
   )
 })
 
-interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> {}
+interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> { }
 
 export const AppNavigator = observer(function AppNavigator(props: NavigationProps) {
   const colorScheme = useColorScheme()
