@@ -2,7 +2,8 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons"
 import { useNavigation } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
 import * as React from "react"
-import { Image, ImageStyle, Pressable, StyleProp, TextStyle, View, ViewStyle } from "react-native"
+import { Pressable, StyleProp, TextStyle, View, ViewStyle } from "react-native"
+import FastImage, { ImageStyle } from 'react-native-fast-image'
 import { colors, typography } from "../theme"
 import { Card } from "./Card"
 
@@ -29,7 +30,14 @@ export const ListingCard = observer(function ListingCard(props: ListingCardProps
       <Card
         preset="default"
         style={$container}
-        HeadingComponent={<Image source={{ uri: data.remoteImages[0] }} style={$cardImage} />}
+        HeadingComponent={
+          <FastImage style={$cardImage}
+            source={{
+              uri: data.remoteImages[0],
+              priority: FastImage.priority.normal,
+            }}
+            resizeMode={FastImage.resizeMode.cover}
+          />}
         ContentComponent={
           <View style={$contentContainer}>
             <Text style={$labelHeading} text={data.name} numberOfLines={1} />
