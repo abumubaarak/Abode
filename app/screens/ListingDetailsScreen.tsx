@@ -1,10 +1,10 @@
 import { AntDesign, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons"
-import { RouteProp, useRoute } from "@react-navigation/native"
+import auth from "@react-native-firebase/auth"
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import React, { FC, useEffect, useState } from "react"
-import { Dimensions, Image, ImageStyle, TextStyle, View, ViewStyle } from "react-native"
-import Ripple from "react-native-material-ripple"
+import { Dimensions, Image, ImageStyle, Pressable, TextStyle, View, ViewStyle } from "react-native"
 import { Carousel, Pagination } from "react-native-snap-carousel"
 import { Button, ListingTag, Screen, Text } from "../components"
 import LisitingFeaturesTag from "../components/LisitingFeaturesTag"
@@ -12,27 +12,41 @@ import { Loader } from "../components/Loader"
 import useFirestore from "../hooks/useFirestore"
 import { AppStackParamList, AppStackScreenProps } from "../navigators"
 import { colors, typography } from "../theme"
-import { PROPERTY } from "../utils/firebase"
+import { addWishlist, PROPERTY, removeWishlist, WISHLISTS } from "../utils/firebase"
 
 // REMOVE ME! ⬇️ This TS ignore will not be necessary after you've added the correct navigator param type
 // @ts-ignore
 export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "ListingDetails">> =
   observer(function ListingDetailsScreen() {
     // Pull in navigation via hook
-    // const navigation = useNavigation()
+    const navigation = useNavigation()
     const sliderWidth = Dimensions.get("window").width
-
-    const { getDocument, document, isLoading } = useFirestore()
-
-    const [like, setLike] = useState<boolean>(false)
-    const [activeSlide, setActiveSlide] = useState<number>(0)
     const route = useRoute<RouteProp<AppStackParamList, "ListingDetails">>()
     const params = route.params
+    const { getDocument, document, isLoading } = useFirestore()
+    const { queryDocument, data: userWishList, isLoading: load } = useFirestore()
+
+    const [activeSlide, setActiveSlide] = useState<number>(0)
 
     useEffect(() => {
       getDocument(PROPERTY, params.id)
+      if (auth()?.currentUser?.uid) {
+        queryDocument(WISHLISTS, "propertyId", "==", params.id)
+      }
     }, [])
 
+    const handleWishList = () => {
+      if (auth()?.currentUser?.uid) {
+        if (userWishList[0]?.propertyId === params.id) {
+          removeWishlist(userWishList[0]?.id)
+        } else {
+          addWishlist(params.id)
+        }
+        queryDocument(WISHLISTS, "propertyId", "==", params.id)
+      } else {
+        navigation.navigate("Authentication")
+      }
+    }
     if (isLoading) return <Loader />
 
     return (
@@ -59,15 +73,15 @@ export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "Lis
             inactiveDotScale={0.8}
           />
           <View style={$wishListContainer}>
-            <Ripple onPress={() => setLike(!like)}>
+            <Pressable onPress={handleWishList}>
               <View style={$heartIcon}>
                 <AntDesign
-                  name={like ? "heart" : "hearto"}
+                  name={userWishList[0]?.propertyId === params.id ? "heart" : "hearto"}
                   size={20}
                   color={colors.palette.primary50}
                 />
               </View>
-            </Ripple>
+            </Pressable>
           </View>
 
           <View style={$propertyInfoContainer}>

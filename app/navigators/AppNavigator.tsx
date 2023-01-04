@@ -39,7 +39,7 @@ export type AppStackParamList = {
   Welcome: undefined
   Home: NavigatorScreenParams<HomeNavigatorParamList> // @demo remove-current-line
   Payment: undefined
-  Authentication: { user: string }
+  Authentication: undefined
   ListingDetails: { id: string }
 
   // 🔥 Your screens go here
@@ -92,11 +92,7 @@ const AppStack = observer(function AppStack() {
           presentation: "fullScreenModal",
         }}
       >
-        <Stack.Screen
-          name="Authentication"
-          initialParams={{ user: "tenant" }}
-          component={AuthenticationScreen}
-        />
+        <Stack.Screen name="Authentication" component={AuthenticationScreen} />
       </Stack.Group>
     </Stack.Navigator>
   )

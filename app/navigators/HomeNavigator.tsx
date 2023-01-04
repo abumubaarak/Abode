@@ -71,6 +71,7 @@ export const HomeNavigator = () => {
         component={WishlistScreen}
         options={{
           tabBarLabel: "Wish Lists",
+          headerShown: true,
 
           tabBarIcon: ({ focused }) => (
             <AntDesign

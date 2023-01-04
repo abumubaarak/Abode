@@ -1,26 +1,42 @@
+import auth from "@react-native-firebase/auth"
+import { ContentStyle, FlashList } from "@shopify/flash-list"
 import { observer } from "mobx-react-lite"
-import React, { FC } from "react"
-import { ViewStyle } from "react-native"
-import { Screen, Text } from "../components"
+import React, { FC, useEffect } from "react"
+import { View, ViewStyle } from "react-native"
+import { ListingCard } from "../components"
+import { Loader } from "../components/Loader"
+import useFirestore from "../hooks/useFirestore"
 import { HomeTabScreenProps } from "../navigators"
-// import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "../models"
+import { spacing } from "../theme"
 
 export const WishlistScreen: FC<HomeTabScreenProps<"Wishlist">> = observer(
   function WishlistScreen() {
-    // Pull in one of our MST stores
-    // const { someStore, anotherStore } = useStores()
+    const { queryWishlist, data: userWishList, isLoading } = useFirestore()
+    useEffect(() => {
+      if (auth()?.currentUser?.uid) {
+        queryWishlist()
+      }
+    }, [])
 
-    // Pull in navigation via hook
-    // const navigation = useNavigation()
+    if (isLoading) return <Loader />
+
     return (
-      <Screen style={$root} preset="scroll" safeAreaEdges={["top"]}>
-        <Text text="wishlist" />
-      </Screen>
+      <FlashList
+        data={userWishList}
+        contentContainerStyle={$root}
+        ItemSeparatorComponent={() => <View style={$separator} />}
+        renderItem={({ item }) => <ListingCard addMargin={true} key={item.id} item={item} />}
+        estimatedItemSize={200}
+      />
     )
   },
 )
 
-const $root: ViewStyle = {
-  flex: 1,
+const $root: ContentStyle = {
+  paddingTop: spacing.medium,
+  paddingHorizontal: spacing.medium,
+}
+
+const $separator: ViewStyle = {
+  height: spacing.medium,
 }

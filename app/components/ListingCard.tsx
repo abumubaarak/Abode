@@ -28,7 +28,6 @@ export const ListingCard = observer(function ListingCard(props: ListingCardProps
     <Pressable onPress={() => navigation.navigate("ListingDetails", { id: item.id })}>
       <Card
         preset="default"
-        verticalAlignment="space-between"
         style={$container}
         HeadingComponent={<Image source={{ uri: data.remoteImages[0] }} style={$cardImage} />}
         ContentComponent={

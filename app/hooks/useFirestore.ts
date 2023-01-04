@@ -1,5 +1,8 @@
+import auth from "@react-native-firebase/auth"
 import firestore, { FirebaseFirestoreTypes } from "@react-native-firebase/firestore"
+import { WhereFilterOp } from "firebase/firestore"
 import { useState } from "react"
+import { PROPERTY, WISHLISTS } from "../utils/firebase"
 
 const useFirestore = () => {
   const [data, setData] = useState<FirebaseFirestoreTypes.DocumentData[]>([])
@@ -20,13 +23,56 @@ const useFirestore = () => {
     setLoading(true)
     const collection = await firestore().collection(collectionPath).doc(docPath).get()
     setDocument(collection.data())
-    console.log(collection.data())
     if (collection) {
       setLoading(false)
     }
   }
+  const queryDocument = async (
+    collectionPath: string,
+    query: string,
+    opStr: WhereFilterOp,
+    value: string,
+  ) => {
+    setLoading(true)
+    const collection = await firestore()
+      .collection(collectionPath)
+      .where(query, opStr, value)
+      .where("uid", "==", auth().currentUser.uid)
+      .get()
+    const newData = collection.docs.map((doc) => ({ ...doc.data() }))
+    setData(newData)
+    if (data) {
+      setLoading(false)
+    }
+  }
 
-  return { getCollection, data, isLoading, document, getDocument }
+  const queryWishlist = async () => {
+    setLoading(true)
+    const userWishList = await firestore()
+      .collection(WISHLISTS)
+      .where("uid", "==", auth().currentUser.uid)
+      .get()
+
+    const userWishListArr = userWishList.docs.map((doc) => ({ ...doc.data() }))
+
+    const query = await firestore().collection(PROPERTY).get()
+
+    const listings = query.docs.map((doc) => ({ ...doc.data() }))
+
+    const wishlist = userWishListArr.map((doc) =>
+      listings.filter((item) => item.id === doc.propertyId),
+    )
+
+    const wishlistArr = []
+    wishlist.map((doc) => wishlistArr.push(...doc))
+    setData(wishlistArr)
+
+    if (data) {
+      setLoading(false)
+    }
+  }
+
+  return { getCollection, data, isLoading, document, getDocument, queryDocument, queryWishlist }
 }
 
 export default useFirestore
