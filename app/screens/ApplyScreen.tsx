@@ -23,7 +23,7 @@ export const ApplyScreen: FC<StackScreenProps<AppStackScreenProps, "Apply">> = o
 
     const route = useRoute<RouteProp<AppStackParamList, "Apply">>()
     const params = route.params
-    const { pId, lid, address, pName, uid } = params
+    const { pId, lid, address, pName, uid, hasApplied } = params
     const { getDocument: getLandlord, document: landlord, isLoading } = useFirestore()
     const { applyRent, isLoading: applyRentIsLoading, document: data } = useFirestore()
     useEffect(() => {
@@ -33,6 +33,7 @@ export const ApplyScreen: FC<StackScreenProps<AppStackScreenProps, "Apply">> = o
     useEffect(() => {
       if (data?.id) {
         console.log(data?.id)
+        hasApplied(true)
         navigation.goBack()
       }
     }, [applyRentIsLoading])

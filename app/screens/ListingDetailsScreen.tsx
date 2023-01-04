@@ -4,7 +4,7 @@ import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import React, { FC, useEffect, useState } from "react"
-import { Dimensions, Image, ImageStyle, Pressable, TextStyle, View, ViewStyle } from "react-native"
+import { ActivityIndicator, Dimensions, Image, ImageStyle, Pressable, TextStyle, View, ViewStyle } from "react-native"
 import { Carousel, Pagination } from "react-native-snap-carousel"
 import { Button, ListingTag, Screen, Text } from "../components"
 import LisitingFeaturesTag from "../components/LisitingFeaturesTag"
@@ -12,7 +12,7 @@ import { Loader } from "../components/Loader"
 import useFirestore from "../hooks/useFirestore"
 import { AppStackParamList, AppStackScreenProps } from "../navigators"
 import { colors, typography } from "../theme"
-import { addWishlist, PROPERTY, removeWishlist, WISHLISTS } from "../utils/firebase"
+import { addWishlist, PROPERTY, removeWishlist, REQUEST, WISHLISTS } from "../utils/firebase"
 
 // REMOVE ME! ⬇️ This TS ignore will not be necessary after you've added the correct navigator param type
 // @ts-ignore
@@ -25,13 +25,19 @@ export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "Lis
     const params = route.params
     const { getDocument, document, isLoading } = useFirestore()
     const { queryDocument, data: userWishList, isLoading: load } = useFirestore()
+    const { queryDocument: queryRequest, data: requestResponse, isLoading: requestIsLoading } = useFirestore()
 
     const [activeSlide, setActiveSlide] = useState<number>(0)
+    const [applied, setApplied] = useState<boolean>(false)
 
     useEffect(() => {
       getDocument(PROPERTY, params.id)
       if (auth()?.currentUser?.uid) {
-        queryDocument(WISHLISTS, "propertyId", "==", params.id)
+        Promise.all(
+          [queryRequest(REQUEST, "pId", "==", params.id),
+          queryDocument(WISHLISTS, "propertyId", "==", params.id)]
+        )
+
       }
     }, [])
 
@@ -49,19 +55,20 @@ export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "Lis
     }
 
     const handleInterested = () => {
-      navigation.navigate("Apply", {
-        lid: document?.uid,
-        pName: document?.name,
-        address: document?.address,
-        uid: auth().currentUser.uid,
-        pId: params.id,
-      })
 
-      // if (auth()?.currentUser?.uid) {
-      //   navigation.navigate("Apply")
-      // } else {
-      //   navigation.navigate("Authentication")
-      // }
+
+      if (auth()?.currentUser?.uid) {
+        navigation.navigate("Apply", {
+          lid: document?.uid,
+          pName: document?.name,
+          address: document?.address,
+          uid: auth().currentUser.uid,
+          pId: params.id,
+          hasApplied: setApplied
+        })
+      } else {
+        navigation.navigate("Authentication")
+      }
     }
     if (isLoading) return <Loader />
 
@@ -156,7 +163,17 @@ export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "Lis
         <View style={$buttonContainer}>
           <Button
             text="I'm Interested"
-            style={$button}
+            style={[$button, { opacity: requestResponse[0]?.pId == params?.id || applied ? 0.4 : 1 }]}
+            disabled={requestIsLoading || requestResponse[0]?.pId == params.id || applied}
+            LeftAccessory={(_) =>
+              isLoading && (
+                <ActivityIndicator
+                  animating={requestIsLoading}
+                  size="small"
+                  color={colors?.palette.primary300}
+                />
+              )
+            }
             textStyle={$buttonLabel}
             onPress={handleInterested}
           />

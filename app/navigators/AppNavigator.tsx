@@ -10,7 +10,7 @@ import {
   DefaultTheme,
   NavigationContainer,
   NavigatorScreenParams,
-  useNavigation,
+  useNavigation
 } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { StackScreenProps } from "@react-navigation/stack"
@@ -43,7 +43,7 @@ export type AppStackParamList = {
   Payment: undefined
   Authentication: undefined
   ListingDetails: { id: string }
-  Apply: { lid: string; pName: string; address: string; uid: string; pId: string }
+  Apply: { lid: string; pName: string; address: string; uid: string; pId: string, hasApplied: React.Dispatch<React.SetStateAction<boolean>> }
 
   // 🔥 Your screens go here
 }
@@ -112,7 +112,7 @@ const AppStack = observer(function AppStack() {
   )
 })
 
-interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> {}
+interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> { }
 
 export const AppNavigator = observer(function AppNavigator(props: NavigationProps) {
   const colorScheme = useColorScheme()
