@@ -2,8 +2,13 @@ import auth from "@react-native-firebase/auth"
 import firestore, { FirebaseFirestoreTypes } from "@react-native-firebase/firestore"
 import { WhereFilterOp } from "firebase/firestore"
 import { useState } from "react"
-import { PROPERTY, WISHLISTS } from "../utils/firebase"
-
+import { wait } from "../utils"
+import { PROPERTY, REQUEST, WISHLISTS } from "../utils/firebase"
+type RentRequestI = {
+  lid: string
+  uid: string
+  pId: string
+}
 const useFirestore = () => {
   const [data, setData] = useState<FirebaseFirestoreTypes.DocumentData[]>([])
   const [document, setDocument] = useState<FirebaseFirestoreTypes.DocumentData>()
@@ -72,7 +77,30 @@ const useFirestore = () => {
     }
   }
 
-  return { getCollection, data, isLoading, document, getDocument, queryDocument, queryWishlist }
+  const applyRent = async (request: RentRequestI) => {
+    setLoading(true)
+    const requestCollection = await firestore().collection(REQUEST).doc()
+    requestCollection.set({
+      ...request,
+      id: requestCollection.id,
+    })
+    if (requestCollection.id) {
+      wait(4000).then(() => {
+        setDocument(requestCollection)
+        setLoading(false)
+      })
+    }
+  }
+  return {
+    applyRent,
+    getCollection,
+    data,
+    isLoading,
+    document,
+    getDocument,
+    queryDocument,
+    queryWishlist,
+  }
 }
 
 export default useFirestore

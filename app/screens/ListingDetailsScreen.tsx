@@ -47,6 +47,22 @@ export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "Lis
         navigation.navigate("Authentication")
       }
     }
+
+    const handleInterested = () => {
+      navigation.navigate("Apply", {
+        lid: document?.uid,
+        pName: document?.name,
+        address: document?.address,
+        uid: auth().currentUser.uid,
+        pId: params.id,
+      })
+
+      // if (auth()?.currentUser?.uid) {
+      //   navigation.navigate("Apply")
+      // } else {
+      //   navigation.navigate("Authentication")
+      // }
+    }
     if (isLoading) return <Loader />
 
     return (
@@ -138,7 +154,12 @@ export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "Lis
         </Screen>
 
         <View style={$buttonContainer}>
-          <Button text="I'm Interested" style={$button} textStyle={$buttonLabel} />
+          <Button
+            text="I'm Interested"
+            style={$button}
+            textStyle={$buttonLabel}
+            onPress={handleInterested}
+          />
         </View>
       </View>
     )
