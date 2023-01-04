@@ -21,7 +21,6 @@ const LisitingFeaturesTag = observer(function ListingAmentiesTag(props: ListingA
   const { item, type } = props
 
   const data = type === "amenities" ? AMENITIES : RULES
-  console.log(type)
 
   return (
     <>

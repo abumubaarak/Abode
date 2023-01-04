@@ -24,15 +24,14 @@ export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "Lis
     const route = useRoute<RouteProp<AppStackParamList, "ListingDetails">>()
     const params = route.params
     const { getDocument, document, isLoading } = useFirestore()
-    const { queryDocument: queryWishList, data: userWishList } = useFirestore()
+    const { queryDocument, data: userWishList, isLoading: load } = useFirestore()
 
     const [activeSlide, setActiveSlide] = useState<number>(0)
-
 
     useEffect(() => {
       getDocument(PROPERTY, params.id)
       if (auth()?.currentUser?.uid) {
-        queryWishList(WISHLISTS, "propertyId", "==", params.id)
+        queryDocument(WISHLISTS, "propertyId", "==", params.id)
       }
     }, [])
 
@@ -43,11 +42,10 @@ export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "Lis
         } else {
           addWishlist(params.id)
         }
-        queryWishList(WISHLISTS, "propertyId", "==", params.id)
+        queryDocument(WISHLISTS, "propertyId", "==", params.id)
       } else {
         navigation.navigate("Authentication")
       }
-
     }
     if (isLoading) return <Loader />
 
