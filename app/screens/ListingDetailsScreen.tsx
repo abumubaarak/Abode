@@ -4,7 +4,8 @@ import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import React, { FC, useEffect, useState } from "react"
-import { ActivityIndicator, Dimensions, Image, ImageStyle, Pressable, TextStyle, View, ViewStyle } from "react-native"
+import { ActivityIndicator, Dimensions, Pressable, TextStyle, View, ViewStyle } from "react-native"
+import FastImage, { ImageStyle } from 'react-native-fast-image'
 import { Carousel, Pagination } from "react-native-snap-carousel"
 import { Button, ListingTag, Screen, Text } from "../components"
 import LisitingFeaturesTag from "../components/LisitingFeaturesTag"
@@ -12,6 +13,7 @@ import { Loader } from "../components/Loader"
 import useFirestore from "../hooks/useFirestore"
 import { AppStackParamList, AppStackScreenProps } from "../navigators"
 import { colors, typography } from "../theme"
+
 import { addWishlist, PROPERTY, removeWishlist, REQUEST, WISHLISTS } from "../utils/firebase"
 
 // REMOVE ME! ⬇️ This TS ignore will not be necessary after you've added the correct navigator param type
@@ -84,7 +86,15 @@ export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "Lis
             inactiveSlideOpacity={1}
             onSnapToItem={(index) => setActiveSlide(index)}
             data={document?.remoteImages}
-            renderItem={({ item }) => <Image source={{ uri: item }} style={$slidingImage} />}
+            renderItem={({ item }) =>
+              <FastImage style={$slidingImage}
+                source={{
+                  uri: item,
+                  priority: FastImage.priority.normal,
+                }}
+                resizeMode={FastImage.resizeMode.cover}
+              />
+            }
           />
           <Pagination
             dotsLength={document?.remoteImages?.length}
