@@ -20,6 +20,7 @@ import { useColorScheme } from "react-native"
 import { Icon } from "../components"
 import Config from "../config"
 import { ApplyScreen, AuthenticationScreen, ListingDetailsScreen } from "../screens"
+import { ConversationScreen } from "../screens/ConversationScreen"
 import { colors } from "../theme"
 import { HomeNavigator, HomeNavigatorParamList } from "./HomeNavigator"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
@@ -43,7 +44,8 @@ export type AppStackParamList = {
   Payment: undefined
   Authentication: undefined
   ListingDetails: { id: string }
-  Apply: { lid: string; pName: string; address: string; uid: string; pId: string, hasApplied: React.Dispatch<React.SetStateAction<boolean>> }
+  Apply: { lid: string; pName: string; address: string; tid: string; tName: string, pId: string, hasApplied: React.Dispatch<React.SetStateAction<boolean>> }
+  Conversation: { message_id: string; tenant_id: string; landlord_id: string }
 
   // 🔥 Your screens go here
 }
@@ -91,6 +93,11 @@ const AppStack = observer(function AppStack() {
           headerTintColor: colors.black,
         }}
         component={ListingDetailsScreen}
+      />
+      <Stack.Screen
+        name="Conversation"
+        component={ConversationScreen}
+        options={{ headerShown: true, animation: "slide_from_right" }}
       />
       <Stack.Group
         screenOptions={{

@@ -39,10 +39,9 @@ export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "Lis
           [queryRequest(REQUEST, "pId", "==", params.id),
           queryDocument(WISHLISTS, "propertyId", "==", params.id)]
         )
-
       }
     }, [])
-
+    console.log(requestResponse, params.id)
     const handleWishList = () => {
       if (auth()?.currentUser?.uid) {
         if (userWishList[0]?.propertyId === params.id) {
@@ -57,14 +56,13 @@ export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "Lis
     }
 
     const handleInterested = () => {
-
-
       if (auth()?.currentUser?.uid) {
         navigation.navigate("Apply", {
           lid: document?.uid,
           pName: document?.name,
           address: document?.address,
-          uid: auth().currentUser.uid,
+          tid: auth().currentUser.uid,
+          tName: auth().currentUser.displayName,
           pId: params.id,
           hasApplied: setApplied
         })

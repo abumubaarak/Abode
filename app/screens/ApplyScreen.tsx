@@ -1,7 +1,7 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
-import React, { FC, useEffect } from "react"
+import React, { FC, useEffect, useState } from "react"
 import { TextStyle, View, ViewStyle } from "react-native"
 import { Button, Icon, Screen, Text, TextField } from "../components"
 import { Loader } from "../components/Loader"
@@ -23,16 +23,17 @@ export const ApplyScreen: FC<StackScreenProps<AppStackScreenProps, "Apply">> = o
 
     const route = useRoute<RouteProp<AppStackParamList, "Apply">>()
     const params = route.params
-    const { pId, lid, address, pName, uid, hasApplied } = params
+    const { pId, lid, address, pName, tid, hasApplied, tName } = params
     const { getDocument: getLandlord, document: landlord, isLoading } = useFirestore()
     const { applyRent, isLoading: applyRentIsLoading, document: data } = useFirestore()
+    const [message, setMessage] = useState<string>(`I am interested in ${pName} , ${address}.`)
+
     useEffect(() => {
       getLandlord(USERS, lid)
     }, [lid])
 
     useEffect(() => {
       if (data?.id) {
-        console.log(data?.id)
         hasApplied(true)
         navigation.goBack()
       }
@@ -41,7 +42,7 @@ export const ApplyScreen: FC<StackScreenProps<AppStackScreenProps, "Apply">> = o
     // Pull in navigation via hook
 
     const handleApply = () => {
-      applyRent({ lid, pId, uid })
+      applyRent({ lid, pId, tid, message, tName })
     }
 
     if (isLoading || applyRentIsLoading) return <Loader />
@@ -89,7 +90,8 @@ export const ApplyScreen: FC<StackScreenProps<AppStackScreenProps, "Apply">> = o
             <TextField
               style={$requestField}
               multiline
-              value={`I am interested in ${pName} , ${address}.`}
+              value={message}
+              onChangeText={text => setMessage(text)}
             />
           </View>
         </Screen>
