@@ -4,7 +4,7 @@ import { CompositeScreenProps } from "@react-navigation/native"
 import React from "react"
 import { TextStyle, ViewStyle } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { InboxScreen, SearchScreen, WishlistScreen } from "../screens"
+import { InboxScreen, ProfileScreen, SearchScreen, WishlistScreen } from "../screens"
 import { colors, typography } from "../theme"
 import { AppStackParamList, AppStackScreenProps } from "./AppNavigator"
 
@@ -57,6 +57,7 @@ export const HomeNavigator = () => {
         name="Inbox"
         component={InboxScreen}
         options={{
+          headerShown: true,
           tabBarIcon: ({ focused }) => (
             <AntDesign
               name="message1"
@@ -84,7 +85,7 @@ export const HomeNavigator = () => {
       />
       <Tab.Screen
         name="Profile"
-        component={InboxScreen}
+        component={ProfileScreen}
         options={{
           tabBarIcon: ({ focused }) => (
             <AntDesign

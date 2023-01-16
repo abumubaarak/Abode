@@ -6,8 +6,10 @@ import { wait } from "../utils"
 import { PROPERTY, REQUEST, WISHLISTS } from "../utils/firebase"
 type RentRequestI = {
   lid: string
-  uid: string
+  tid: string
   pId: string
+  message: string
+  tName: string
 }
 const useFirestore = () => {
   const [data, setData] = useState<FirebaseFirestoreTypes.DocumentData[]>([])
@@ -83,6 +85,8 @@ const useFirestore = () => {
     requestCollection.set({
       ...request,
       id: requestCollection.id,
+      status: "pending",
+      timestamp: Date.now()
     })
     if (requestCollection.id) {
       wait(4000).then(() => {
