@@ -12,9 +12,12 @@
 
 import { useFonts } from "expo-font"
 
+import { StripeProvider } from "@stripe/stripe-react-native"
 import "./i18n"
+
 import "./utils/ignoreWarnings"
 
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import * as Linking from "expo-linking"
 import React from "react"
 import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
@@ -107,11 +110,15 @@ function App(props: AppProps) {
   return (
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
       <ErrorBoundary catchErrors={Config.catchErrors}>
-        <AppNavigator
-          linking={linking}
-          initialState={initialNavigationState}
-          onStateChange={onNavigationStateChange}
-        />
+        <StripeProvider publishableKey={Config.PUBLISHABLE_KEY}>
+          <BottomSheetModalProvider>
+            <AppNavigator
+              linking={linking}
+              initialState={initialNavigationState}
+              onStateChange={onNavigationStateChange}
+            />
+          </BottomSheetModalProvider>
+        </StripeProvider>
       </ErrorBoundary>
     </SafeAreaProvider>
   )

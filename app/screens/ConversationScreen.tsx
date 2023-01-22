@@ -6,11 +6,7 @@ import { observer } from "mobx-react-lite"
 import { Feather } from "@expo/vector-icons"
 import React, { FC, useCallback, useEffect, useState } from "react"
 import { TextStyle, View, ViewStyle } from "react-native"
-import {
-  Composer,
-  Day,
-  GiftedChat, Send
-} from "react-native-gifted-chat"
+import { Composer, Day, GiftedChat, Send } from "react-native-gifted-chat"
 import io from "socket.io-client"
 import { customChatBubble, customChatMessage, customInputToolbar } from "../components/Chat.custom"
 import { Loader } from "../components/Loader"
@@ -20,7 +16,6 @@ import { colors, typography } from "../theme"
 
 // REMOVE ME! ⬇️ This TS ignore will not be necessary after you've added the correct navigator param type
 // @ts-ignore
-
 
 export const ConversationScreen: FC<StackScreenProps<AppStackScreenProps, "Conversation">> =
   observer(function ConversationScreen() {
@@ -37,20 +32,15 @@ export const ConversationScreen: FC<StackScreenProps<AppStackScreenProps, "Conve
       socket.emit("join_chat", JOINED_USER)
     })
 
-
     useEffect(() => {
-
       return () => {
         socket.emit("left", JOINED_USER)
         socket.disconnect()
-        socket.removeAllListeners("conversation_chat");
-      };
+        socket.removeAllListeners("conversation_chat")
+      }
     }, [])
     useEffect(() => {
-
       getConversation(params.message_id)
-
-
     }, [])
 
     useEffect(() => {
@@ -107,9 +97,7 @@ export const ConversationScreen: FC<StackScreenProps<AppStackScreenProps, "Conve
           renderMessageText={customChatMessage}
           alwaysShowSend={true}
           wrapInSafeArea={true}
-          renderDay={(props) => (
-            <Day {...props} textStyle={$day} />
-          )}
+          renderDay={(props) => <Day {...props} textStyle={$day} />}
           maxComposerHeight={100}
           renderInputToolbar={customInputToolbar}
           renderComposer={(props) => <Composer {...props} />}
@@ -130,29 +118,27 @@ export const ConversationScreen: FC<StackScreenProps<AppStackScreenProps, "Conve
             _id: auth().currentUser.uid,
           }}
         />
-
-      </View >
+      </View>
     )
   })
-
 
 const $root: ViewStyle = {
   flex: 1,
   backgroundColor: colors.white,
-  marginHorizontal: 4
+  marginHorizontal: 4,
 }
 
 const $messageContainer: ViewStyle = {
   backgroundColor: colors.white,
-  paddingBottom: 25
+  paddingBottom: 25,
 }
 
 const $day: TextStyle = {
   fontFamily: typography.primary.light,
-  fontSize: 13
+  fontSize: 13,
 }
 
 const $send: ViewStyle = {
   justifyContent: "center",
-  marginRight: 6
+  marginRight: 6,
 }

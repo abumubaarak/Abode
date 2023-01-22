@@ -33,7 +33,7 @@ export const WishlistScreen: FC<HomeTabScreenProps<"Wishlist">> = observer(
 )
 
 const $root: ContentStyle = {
-  paddingTop: spacing.medium,
+  paddingTop: spacing.small,
   paddingHorizontal: spacing.medium,
 }
 

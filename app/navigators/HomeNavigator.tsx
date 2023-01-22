@@ -1,10 +1,11 @@
-import { AntDesign } from "@expo/vector-icons"
+import { AntDesign, Ionicons } from "@expo/vector-icons"
 import { BottomTabScreenProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { CompositeScreenProps } from "@react-navigation/native"
 import React from "react"
+
 import { TextStyle, ViewStyle } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { InboxScreen, ProfileScreen, SearchScreen, WishlistScreen } from "../screens"
+import { InboxScreen, PaymentScreen, ProfileScreen, SearchScreen, WishlistScreen } from "../screens"
 import { colors, typography } from "../theme"
 import { AppStackParamList, AppStackScreenProps } from "./AppNavigator"
 
@@ -13,6 +14,7 @@ export type HomeNavigatorParamList = {
   Inbox: undefined
   Wishlist: undefined
   Profile: undefined
+  Payment: undefined
 }
 
 export type HomeTabScreenProps<T extends keyof HomeNavigatorParamList> = CompositeScreenProps<
@@ -77,6 +79,20 @@ export const HomeNavigator = () => {
           tabBarIcon: ({ focused }) => (
             <AntDesign
               name="hearto"
+              size={22}
+              color={focused ? colors.palette.primary50 : colors.gray50}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Payment"
+        component={PaymentScreen}
+        options={{
+          headerShown: true,
+          tabBarIcon: ({ focused }) => (
+            <Ionicons
+              name="ios-receipt-outline"
               size={22}
               color={focused ? colors.palette.primary50 : colors.gray50}
             />

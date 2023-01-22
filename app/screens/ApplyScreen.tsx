@@ -56,42 +56,25 @@ export const ApplyScreen: FC<StackScreenProps<AppStackScreenProps, "Apply">> = o
             </View>
           </View>
           <View style={$content}>
-            <Text
-              text="Your Request"
-              style={$requestLabel}
-            />
+            <Text text="Your Request" style={$requestLabel} />
             <Text
               style={$requestInfo}
               text="Adding a message increases your chances of finding your next home."
             />
-            <View
-              style={$landlordProfileContainer}
-            >
-              <View
-                style={$avatar}
-              >
-                <Text
-                  text={avatarName(landlord?.displayName)}
-                  style={$avatarLabel}
-                />
+            <View style={$landlordProfileContainer}>
+              <View style={$avatar}>
+                <Text text={avatarName(landlord?.displayName)} style={$avatarLabel} />
               </View>
               <View style={$labelContainer}>
-                <Text
-                  numberOfLines={1}
-                  style={$labelName}
-                  text={landlord?.displayName}
-                />
-                <Text
-                  text="Landlord"
-                  style={$labelTag}
-                />
+                <Text numberOfLines={1} style={$labelName} text={landlord?.displayName} />
+                <Text text="Landlord" style={$labelTag} />
               </View>
             </View>
             <TextField
               style={$requestField}
               multiline
               value={message}
-              onChangeText={text => setMessage(text)}
+              onChangeText={(text) => setMessage(text)}
             />
           </View>
         </Screen>
@@ -146,7 +129,7 @@ const $closeView: ViewStyle = {
 const $requestLabel: TextStyle = {
   lineHeight: 43,
   fontSize: 27,
-  fontFamily: typography.primary.bold
+  fontFamily: typography.primary.bold,
 }
 const $requestInfo: TextStyle = {
   paddingTop: spacing.medium,
@@ -169,7 +152,7 @@ const $avatar: ViewStyle = {
   borderRadius: 100,
 }
 const $content: ViewStyle = {
-  marginTop: 30
+  marginTop: 30,
 }
 
 const $avatarLabel: TextStyle = {
@@ -180,17 +163,18 @@ const $avatarLabel: TextStyle = {
   paddingTop: 15,
 }
 const $labelContainer: ViewStyle = {
-  paddingLeft: 10
+  paddingLeft: 10,
 }
 const $labelName: TextStyle = {
   fontSize: 16,
-  fontFamily: typography.primary.semiBold
+  fontFamily: typography.primary.semiBold,
 }
 const $labelTag: TextStyle = {
   color: colors.gray,
-  fontFamily: typography.primary.light
+  fontFamily: typography.primary.light,
 }
 const $requestField: TextStyle = {
-  height: 150, paddingVertical: 10,
-  fontFamily: typography.primary.light
+  height: 150,
+  paddingVertical: 10,
+  fontFamily: typography.primary.light,
 }
