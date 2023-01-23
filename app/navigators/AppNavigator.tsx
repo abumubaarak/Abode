@@ -19,7 +19,13 @@ import React, { useEffect, useState } from "react"
 import { useColorScheme } from "react-native"
 import { Icon } from "../components"
 import Config from "../config"
-import { ApplyScreen, AuthenticationScreen, ListingDetailsScreen } from "../screens"
+import {
+  ApplyScreen,
+  AuthenticationScreen,
+  ListingDetailsScreen,
+  MapSearchScreen,
+  PropertySearchScreen,
+} from "../screens"
 import CheckoutScreen from "../screens/CheckoutScreen"
 import { ConversationScreen } from "../screens/ConversationScreen"
 import { colors } from "../theme"
@@ -43,6 +49,8 @@ export type AppStackParamList = {
   Welcome: undefined
   Home: NavigatorScreenParams<HomeNavigatorParamList> // @demo remove-current-line
   Payment: undefined
+  MapSearch: undefined
+  PropertySearch: { keyword: string }
   Authentication: undefined
   ListingDetails: { id: string }
   Apply: {
@@ -92,28 +100,36 @@ const AppStack = observer(function AppStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Home" component={HomeNavigator} />
-      <Stack.Screen
-        name="ListingDetails"
-        options={{
-          headerShown: true,
+      <Stack.Group
+        screenOptions={{
           animation: "slide_from_right",
-          headerTransparent: true,
-          headerTitle: "",
-          headerBackTitleVisible: false,
-          headerTintColor: colors.black,
         }}
-        component={ListingDetailsScreen}
-      />
-      <Stack.Screen
-        name="Checkout"
-        component={CheckoutScreen}
-        options={{ headerShown: false, animation: "slide_from_right" }}
-      />
-      <Stack.Screen
-        name="Conversation"
-        component={ConversationScreen}
-        options={{ headerShown: true, animation: "slide_from_right" }}
-      />
+      >
+        <Stack.Screen
+          name="ListingDetails"
+          options={{
+            headerShown: true,
+            headerTransparent: true,
+            headerTitle: "",
+            headerBackTitleVisible: false,
+            headerTintColor: colors.black,
+          }}
+          component={ListingDetailsScreen}
+        />
+        <Stack.Screen
+          name="PropertySearch"
+          component={PropertySearchScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen name="Checkout" component={CheckoutScreen} options={{ headerShown: false }} />
+        <Stack.Screen
+          name="Conversation"
+          component={ConversationScreen}
+          options={{ headerShown: true }}
+        />
+      </Stack.Group>
       <Stack.Group
         screenOptions={{
           presentation: "fullScreenModal",
@@ -129,6 +145,7 @@ const AppStack = observer(function AppStack() {
             headerRight: () => <Icon icon="x" onPress={() => navigation.goBack()} />,
           }}
         />
+        <Stack.Screen name="MapSearch" component={MapSearchScreen} />
       </Stack.Group>
     </Stack.Navigator>
   )

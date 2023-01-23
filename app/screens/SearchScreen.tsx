@@ -1,6 +1,15 @@
+import { useNavigation } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
 import React, { FC, useEffect } from "react"
-import { Dimensions, ImageBackground, ImageStyle, TextStyle, View, ViewStyle } from "react-native"
+import {
+  Dimensions,
+  ImageBackground,
+  ImageStyle,
+  Pressable,
+  TextStyle,
+  View,
+  ViewStyle,
+} from "react-native"
 import Carousel from "react-native-snap-carousel"
 import { FeaturedImage, Icon, ListingCard, Screen, Text } from "../components"
 import useFirestore from "../hooks/useFirestore"
@@ -11,6 +20,7 @@ const HORIZONTAL_MARGIN = 15
 
 export const SearchScreen: FC<HomeTabScreenProps<"Search">> = observer(function SearchScreen() {
   const { getCollection, data, isLoading } = useFirestore()
+  const { navigate } = useNavigation()
   // const { data, isLoading, error } = useFirestoreQuery(["Property"], ref);
 
   useEffect(() => {
@@ -30,12 +40,14 @@ export const SearchScreen: FC<HomeTabScreenProps<"Search">> = observer(function 
     <Screen style={$root} preset="auto">
       <ImageBackground style={$banner} resizeMode="cover" source={bannerTop}>
         <Text text={`Discover a place \nyou'll love to live`} style={$bannerLabel} />
-        <View style={$searchContainer}>
-          <View style={$search}>
-            <Icon icon="search" style={$searchIcon} />
-            <Text text="Search Location" style={$searchLabel} />
+        <Pressable onPress={() => navigate("PropertySearch")}>
+          <View style={$searchContainer}>
+            <View style={$search}>
+              <Icon icon="search" style={$searchIcon} />
+              <Text text="Search Location" style={$searchLabel} />
+            </View>
           </View>
-        </View>
+        </Pressable>
       </ImageBackground>
 
       <View style={$recomContainer}>
