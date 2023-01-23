@@ -1,9 +1,11 @@
+import { useNavigation } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
 import * as React from "react"
 import {
   ImageBackground,
   ImageSourcePropType,
   ImageStyle,
+  Pressable,
   StyleProp,
   TextStyle,
   ViewStyle,
@@ -22,10 +24,13 @@ export interface FeaturedImageProps {
 
 export const FeaturedImage = observer(function FeaturedImage(props: FeaturedImageProps) {
   const { image, text } = props
+  const { navigate } = useNavigation()
 
   return (
     <ImageBackground source={image} imageStyle={$imageContainerStyle} style={$containerStyle}>
-      <Text text={text} preset="subheading" style={$text} />
+      <Pressable onPress={() => navigate("PropertySearch", { keyword: text })}>
+        <Text text={text} preset="subheading" style={$text} />
+      </Pressable>
     </ImageBackground>
   )
 })

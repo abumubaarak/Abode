@@ -1,16 +1,16 @@
 import { AntDesign, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons"
-import auth from "@react-native-firebase/auth"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import React, { FC, useEffect, useState } from "react"
 import { ActivityIndicator, Dimensions, Pressable, TextStyle, View, ViewStyle } from "react-native"
-import FastImage, { ImageStyle } from 'react-native-fast-image'
+import FastImage, { ImageStyle } from "react-native-fast-image"
 import { Carousel, Pagination } from "react-native-snap-carousel"
 import { Button, ListingTag, Screen, Text } from "../components"
 import LisitingFeaturesTag from "../components/LisitingFeaturesTag"
 import { Loader } from "../components/Loader"
 import useFirestore from "../hooks/useFirestore"
+import useUser from "../hooks/useUser"
 import { AppStackParamList, AppStackScreenProps } from "../navigators"
 import { colors, typography } from "../theme"
 
@@ -20,56 +20,62 @@ import { addWishlist, PROPERTY, removeWishlist, REQUEST, WISHLISTS } from "../ut
 // @ts-ignore
 export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "ListingDetails">> =
   observer(function ListingDetailsScreen() {
-    // Pull in navigation via hook
     const navigation = useNavigation()
     const sliderWidth = Dimensions.get("window").width
     const route = useRoute<RouteProp<AppStackParamList, "ListingDetails">>()
     const params = route.params
     const { getDocument, document, isLoading } = useFirestore()
-    const { queryDocument, data: userWishList, isLoading: load } = useFirestore()
-    const { queryDocument: queryRequest, data: requestResponse, isLoading: requestIsLoading } = useFirestore()
-
+    const { queryDocument, data: userWishList, isLoading: wishlistIsLoading } = useFirestore()
+    const {
+      queryDocument: queryRequest,
+      data: requestResponse,
+      isLoading: requestIsLoading,
+    } = useFirestore()
+    const { displayName, uid, email } = useUser()
     const [activeSlide, setActiveSlide] = useState<number>(0)
     const [applied, setApplied] = useState<boolean>(false)
 
     useEffect(() => {
       getDocument(PROPERTY, params.id)
-      if (auth()?.currentUser?.uid) {
-        Promise.all(
-          [queryRequest(REQUEST, "pId", "==", params.id),
-          queryDocument(WISHLISTS, "propertyId", "==", params.id)]
-        )
+      if (uid) {
+        queryRequest(REQUEST, "pId", "==", params.id, "tid")
+        queryDocument(WISHLISTS, "propertyId", "==", params.id, "uid")
       }
     }, [])
-    console.log(requestResponse, params.id)
+
     const handleWishList = () => {
-      if (auth()?.currentUser?.uid) {
+      if (uid) {
         if (userWishList[0]?.propertyId === params.id) {
           removeWishlist(userWishList[0]?.id)
         } else {
           addWishlist(params.id)
         }
-        queryDocument(WISHLISTS, "propertyId", "==", params.id)
+        queryDocument(WISHLISTS, "propertyId", "==", params.id, "uid")
       } else {
         navigation.navigate("Authentication")
       }
     }
 
     const handleInterested = () => {
-      if (auth()?.currentUser?.uid) {
-        navigation.navigate("Apply", {
-          lid: document?.uid,
-          pName: document?.name,
-          address: document?.address,
-          tid: auth().currentUser.uid,
-          tName: auth().currentUser.displayName,
-          pId: params.id,
-          hasApplied: setApplied
-        })
+      if (uid) {
+        if (requestResponse[0]?.status === "accepted" || applied) {
+          navigation.navigate("Checkout", { id: params.id })
+        } else {
+          navigation.navigate("Apply", {
+            lid: document?.uid,
+            pName: document?.name,
+            address: document?.address,
+            tid: uid,
+            tName: displayName,
+            pId: params.id,
+            hasApplied: setApplied,
+          })
+        }
       } else {
         navigation.navigate("Authentication")
       }
     }
+
     if (isLoading) return <Loader />
 
     return (
@@ -84,15 +90,16 @@ export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "Lis
             inactiveSlideOpacity={1}
             onSnapToItem={(index) => setActiveSlide(index)}
             data={document?.remoteImages}
-            renderItem={({ item }) =>
-              <FastImage style={$slidingImage}
+            renderItem={({ item }) => (
+              <FastImage
+                style={$slidingImage}
                 source={{
                   uri: item,
                   priority: FastImage.priority.normal,
                 }}
                 resizeMode={FastImage.resizeMode.cover}
               />
-            }
+            )}
           />
           <Pagination
             dotsLength={document?.remoteImages?.length}
@@ -170,9 +177,11 @@ export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "Lis
 
         <View style={$buttonContainer}>
           <Button
-            text="I'm Interested"
-            style={[$button, { opacity: requestResponse[0]?.pId == params?.id || applied ? 0.4 : 1 }]}
-            disabled={requestIsLoading || requestResponse[0]?.pId == params.id || applied}
+            text={
+              requestResponse[0]?.status === "accepted" || applied ? "Pay rent" : "I'm Interested"
+            }
+            style={[$button, { opacity: document?.status === "paid" ? 0.4 : 1 }]}
+            disabled={document?.status === "paid"}
             LeftAccessory={(_) =>
               isLoading && (
                 <ActivityIndicator

@@ -24,6 +24,10 @@ export type BaseResponse<T> = {
   success: boolean
   data: T[]
 }
+export type BaseResponseObject<T> = {
+  success: boolean
+  data: T
+}
 export type Messages = {
   tenant_id: string
   tenant_name: string
@@ -34,6 +38,7 @@ export type Messages = {
   __v: number
   _id: string
 }
+
 export type Conversations = {
   tenant_id: string
   landlord_id: string

@@ -5,3 +5,16 @@ export const avatarName = (displayName: string) => {
 export const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout))
 }
+
+export const formatCurrency = (value: string) => {
+  const amount = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(+value)
+
+  return amount
+}
+export const currencyFormat = (value: string) => {
+  const amount: number = +value
+  return "$" + amount.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
+}

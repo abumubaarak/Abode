@@ -34,18 +34,30 @@ const useFirestore = () => {
       setLoading(false)
     }
   }
+
   const queryDocument = async (
     collectionPath: string,
     query: string,
     opStr: WhereFilterOp,
     value: string,
+    path: string,
   ) => {
     setLoading(true)
     const collection = await firestore()
       .collection(collectionPath)
       .where(query, opStr, value)
-      .where("uid", "==", auth().currentUser.uid)
+      .where(path, "==", auth().currentUser.uid)
       .get()
+    const newData = collection.docs.map((doc) => ({ ...doc.data() }))
+    setData(newData)
+    if (data) {
+      setLoading(false)
+    }
+  }
+
+  const queryDocuments = async (collectionPath: string, path: string, value: string) => {
+    setLoading(true)
+    const collection = await firestore().collection(collectionPath).where(path, "==", value).get()
     const newData = collection.docs.map((doc) => ({ ...doc.data() }))
     setData(newData)
     if (data) {
@@ -86,7 +98,7 @@ const useFirestore = () => {
       ...request,
       id: requestCollection.id,
       status: "pending",
-      timestamp: Date.now()
+      timestamp: Date.now(),
     })
     if (requestCollection.id) {
       wait(4000).then(() => {
@@ -95,12 +107,14 @@ const useFirestore = () => {
       })
     }
   }
+
   return {
     applyRent,
     getCollection,
     data,
     isLoading,
     document,
+    queryDocuments,
     getDocument,
     queryDocument,
     queryWishlist,
