@@ -10,7 +10,7 @@ import {
   DefaultTheme,
   NavigationContainer,
   NavigatorScreenParams,
-  useNavigation
+  useNavigation,
 } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { StackScreenProps } from "@react-navigation/stack"
@@ -24,7 +24,9 @@ import {
   AuthenticationScreen,
   ListingDetailsScreen,
   MapSearchScreen,
-  PropertySearchScreen
+  PropertySearchScreen,
+  SingleSelectionScreen,
+  VerifyScreen,
 } from "../screens"
 import CheckoutScreen from "../screens/CheckoutScreen"
 import { ConversationScreen } from "../screens/ConversationScreen"
@@ -50,6 +52,11 @@ export type AppStackParamList = {
   Home: NavigatorScreenParams<HomeNavigatorParamList> // @demo remove-current-line
   Payment: undefined
   MapSearch: undefined
+  Verify: undefined
+  SingleSelection: {
+    data: React.Dispatch<React.SetStateAction<string>>
+    type: "gender" | "language"
+  }
   PropertySearch: { keyword: string }
   Authentication: undefined
   ListingDetails: { id: string }
@@ -130,6 +137,7 @@ const AppStack = observer(function AppStack() {
           component={ConversationScreen}
           options={{ headerShown: true }}
         />
+        <Stack.Screen name="Verify" component={VerifyScreen} options={{ headerShown: true }} />
       </Stack.Group>
       <Stack.Group
         screenOptions={{
@@ -137,6 +145,7 @@ const AppStack = observer(function AppStack() {
           animation: "slide_from_bottom",
         }}
       >
+        <Stack.Screen name="SingleSelection" component={SingleSelectionScreen} />
         <Stack.Screen name="Authentication" component={AuthenticationScreen} />
         <Stack.Screen
           name="Apply"
@@ -152,7 +161,7 @@ const AppStack = observer(function AppStack() {
   )
 })
 
-interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> { }
+interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> {}
 
 export const AppNavigator = observer(function AppNavigator(props: NavigationProps) {
   const colorScheme = useColorScheme()

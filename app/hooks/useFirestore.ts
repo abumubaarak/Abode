@@ -3,7 +3,7 @@ import firestore, { FirebaseFirestoreTypes } from "@react-native-firebase/firest
 import { WhereFilterOp } from "firebase/firestore"
 import { useState } from "react"
 import { wait } from "../utils"
-import { PROPERTY, REQUEST, WISHLISTS } from "../utils/firebase"
+import { PROPERTY, REQUEST, USERS, WISHLISTS } from "../utils/firebase"
 type RentRequestI = {
   lid: string
   tid: string
@@ -107,11 +107,36 @@ const useFirestore = () => {
       })
     }
   }
+  const updateInfo = async (
+    uid: string,
+    profession: string,
+    dob: Date,
+    language: string,
+    gender: string,
+  ) => {
+    setLoading(true)
+    const userCollection = await firestore().collection(USERS).doc(uid)
+    userCollection
+      .update({
+        profession,
+        dob,
+        language,
+        isVerify: true,
+        gender,
+      })
+      .then((res) => {
+        console.log(res)
+        wait(4000).then(() => {
+          setLoading(false)
+        })
+      })
+  }
 
   return {
     applyRent,
     getCollection,
     data,
+    updateInfo,
     isLoading,
     document,
     queryDocuments,
