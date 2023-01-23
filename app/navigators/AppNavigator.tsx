@@ -10,7 +10,7 @@ import {
   DefaultTheme,
   NavigationContainer,
   NavigatorScreenParams,
-  useNavigation,
+  useNavigation
 } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { StackScreenProps } from "@react-navigation/stack"
@@ -24,7 +24,7 @@ import {
   AuthenticationScreen,
   ListingDetailsScreen,
   MapSearchScreen,
-  PropertySearchScreen,
+  PropertySearchScreen
 } from "../screens"
 import CheckoutScreen from "../screens/CheckoutScreen"
 import { ConversationScreen } from "../screens/ConversationScreen"
@@ -100,6 +100,7 @@ const AppStack = observer(function AppStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Home" component={HomeNavigator} />
+
       <Stack.Group
         screenOptions={{
           animation: "slide_from_right",
@@ -151,7 +152,7 @@ const AppStack = observer(function AppStack() {
   )
 })
 
-interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> {}
+interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> { }
 
 export const AppNavigator = observer(function AppNavigator(props: NavigationProps) {
   const colorScheme = useColorScheme()
