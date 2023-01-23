@@ -103,6 +103,7 @@ export const HomeNavigator = () => {
         name="Profile"
         component={ProfileScreen}
         options={{
+          headerShown: true,
           tabBarIcon: ({ focused }) => (
             <AntDesign
               name="user"
