@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:980427352092:android:1977d1d2eca8a30a83d7d9",
         "android_client_info": {
-          "package_name": "com.app.abode"
+          "package_name": "com.tenant.abode"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "980427352092-rdcmv42pal2qc6jss9fnhh281ofevpuo.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.app.abode",
+            "package_name": "com.tenant.abode",
             "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
           }
         },
