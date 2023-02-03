@@ -5,15 +5,17 @@
  * and a "main" flow which the user will use once logged in.
  */
 import auth from "@react-native-firebase/auth"
+import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore"
 import {
   DarkTheme,
   DefaultTheme,
   NavigationContainer,
   NavigatorScreenParams,
-  useNavigation,
+  useNavigation
 } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { StackScreenProps } from "@react-navigation/stack"
+import MapboxGL from "@rnmapbox/maps"
 import { observer } from "mobx-react-lite"
 import React, { useEffect, useState } from "react"
 import { useColorScheme } from "react-native"
@@ -26,7 +28,7 @@ import {
   MapSearchScreen,
   PropertySearchScreen,
   SingleSelectionScreen,
-  VerifyScreen,
+  VerifyScreen
 } from "../screens"
 import CheckoutScreen from "../screens/CheckoutScreen"
 import { ConversationScreen } from "../screens/ConversationScreen"
@@ -51,7 +53,7 @@ export type AppStackParamList = {
   Welcome: undefined
   Home: NavigatorScreenParams<HomeNavigatorParamList> // @demo remove-current-line
   Payment: undefined
-  MapSearch: undefined
+  MapSearch: { listings: FirebaseFirestoreTypes.DocumentData[] }
   Verify: undefined
   SingleSelection: {
     data: React.Dispatch<React.SetStateAction<string>>
@@ -90,6 +92,8 @@ export type AppStackScreenProps<T extends keyof AppStackParamList> = StackScreen
 const Stack = createNativeStackNavigator<AppStackParamList>()
 
 const AppStack = observer(function AppStack() {
+  MapboxGL.setAccessToken(Config.MAP_TOKEN);
+
   const [initializing, setInitializing] = useState(true)
   const navigation = useNavigation()
 
@@ -161,7 +165,7 @@ const AppStack = observer(function AppStack() {
   )
 })
 
-interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> {}
+interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> { }
 
 export const AppNavigator = observer(function AppNavigator(props: NavigationProps) {
   const colorScheme = useColorScheme()

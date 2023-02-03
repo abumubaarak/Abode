@@ -27,7 +27,7 @@ export const PropertySearchScreen: FC<StackScreenProps<AppStackScreenProps, "Pro
 
     return (
       <Screen style={$root} preset="scroll" safeAreaEdges={["top"]}>
-        <SearchBar keyword={params.keyword} />
+        <SearchBar keyword={params.keyword} data={data} />
 
         {isLoading && <Loader />}
         {data && !isLoading && (

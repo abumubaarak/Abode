@@ -15,14 +15,12 @@ import useUser from "../hooks/useUser"
 import { AppStackParamList, AppStackScreenProps, navigate } from "../navigators"
 import { colors, typography } from "../theme"
 
-import Config from "../config"
 import { addWishlist, PROPERTY, removeWishlist, REQUEST, WISHLISTS } from "../utils/firebase"
 
 // REMOVE ME! ⬇️ This TS ignore will not be necessary after you've added the correct navigator param type
 // @ts-ignore
 export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "ListingDetails">> =
   observer(function ListingDetailsScreen() {
-    MapboxGL.setAccessToken(Config.MAP_TOKEN);
     const navigation = useNavigation()
     const sliderWidth = Dimensions.get("window").width
     const route = useRoute<RouteProp<AppStackParamList, "ListingDetails">>()

@@ -8,33 +8,34 @@ import {
   StyleProp,
   TextStyle,
   View,
-  ViewStyle,
+  ViewStyle
 } from "react-native"
 import { colors, spacing, typography } from "../theme"
 import { Text } from "./Text"
 
-import { useNavigation } from "@react-navigation/native"
+import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore"
+import { goBack, navigate } from "../navigators"
 
 export interface SearchBarProps {
   /**
    * An optional style override useful for padding & margin.
    */
   style?: StyleProp<ViewStyle>
-  keyword: string
+  keyword: string,
+  data: FirebaseFirestoreTypes.DocumentData[]
 }
 
 /**
  * Describe your component here
  */
 export const SearchBar = observer(function SearchBar(props: SearchBarProps) {
-  const { keyword } = props
-  const navigation = useNavigation()
+  const { keyword, data } = props
 
   return (
     <View style={$container}>
       <Pressable style={$searchContainer}>
         <View style={$search}>
-          <Pressable onPress={() => navigation.goBack()}>
+          <Pressable onPress={() => goBack()}>
             {Platform.OS === "ios" ? (
               <Ionicons name="chevron-back" size={28} style={$searchIcon} />
             ) : (
@@ -44,7 +45,7 @@ export const SearchBar = observer(function SearchBar(props: SearchBarProps) {
           <Text text={keyword} style={$searchLabel} />
         </View>
       </Pressable>
-      <Pressable onPress={() => navigation.navigate("MapSearch")} style={$mapIcon}>
+      <Pressable onPress={() => navigate("MapSearch", { listings: data })} style={$mapIcon}>
         <Feather name="map-pin" size={24} color="black" />
       </Pressable>
     </View>
