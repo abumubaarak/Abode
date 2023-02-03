@@ -1,6 +1,7 @@
 import { AntDesign, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { StackScreenProps } from "@react-navigation/stack"
+import MapboxGL from '@rnmapbox/maps'
 import { observer } from "mobx-react-lite"
 import React, { FC, useEffect, useState } from "react"
 import { ActivityIndicator, Dimensions, Pressable, TextStyle, View, ViewStyle } from "react-native"
@@ -11,15 +12,17 @@ import LisitingFeaturesTag from "../components/LisitingFeaturesTag"
 import { Loader } from "../components/Loader"
 import useFirestore from "../hooks/useFirestore"
 import useUser from "../hooks/useUser"
-import { AppStackParamList, AppStackScreenProps } from "../navigators"
+import { AppStackParamList, AppStackScreenProps, navigate } from "../navigators"
 import { colors, typography } from "../theme"
 
+import Config from "../config"
 import { addWishlist, PROPERTY, removeWishlist, REQUEST, WISHLISTS } from "../utils/firebase"
 
 // REMOVE ME! ⬇️ This TS ignore will not be necessary after you've added the correct navigator param type
 // @ts-ignore
 export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "ListingDetails">> =
   observer(function ListingDetailsScreen() {
+    MapboxGL.setAccessToken(Config.MAP_TOKEN);
     const navigation = useNavigation()
     const sliderWidth = Dimensions.get("window").width
     const route = useRoute<RouteProp<AppStackParamList, "ListingDetails">>()
@@ -52,16 +55,16 @@ export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "Lis
         }
         queryDocument(WISHLISTS, "propertyId", "==", params.id, "uid")
       } else {
-        navigation.navigate("Authentication")
+        navigate("Authentication")
       }
     }
 
     const handleInterested = () => {
       if (uid) {
         if (requestResponse[0]?.status === "accepted" || applied) {
-          navigation.navigate("Checkout", { id: params.id })
+          navigate("Checkout", { id: params.id })
         } else {
-          navigation.navigate("Apply", {
+          navigate("Apply", {
             lid: document?.uid,
             pName: document?.name,
             address: document?.address,
@@ -72,7 +75,7 @@ export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "Lis
           })
         }
       } else {
-        navigation.navigate("Authentication")
+        navigate("Authentication")
       }
     }
 
@@ -172,6 +175,27 @@ export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "Lis
 
             <Text text="Location" style={$label} />
             <Text style={$propertyInfoLabel} text={document?.address} />
+
+            <View style={$container}>
+              <MapboxGL.MapView styleURL={MapboxGL.StyleURL.Street} zoomEnabled={false} scrollEnabled={false} style={$map}>
+                <MapboxGL.Camera
+                  animationMode="moveTo"
+                  zoomLevel={14}
+                  animationDuration={0}
+                  type="CameraStop"
+                  centerCoordinate={document?.addresssLocation} />
+
+                <MapboxGL.PointAnnotation
+                  id="point"
+
+                  coordinate={document?.addresssLocation} >
+                  <View style={$point}>
+                    <AntDesign name="home" size={20} color="white" />
+                  </View>
+                </MapboxGL.PointAnnotation>
+
+              </MapboxGL.MapView>
+            </View>
           </View>
         </Screen>
 
@@ -241,6 +265,12 @@ const $wishListContainer: ViewStyle = {
   marginRight: 20,
   marginTop: -31,
 }
+const $container: ViewStyle = {
+  width: "100%",
+  height: 300,
+  marginTop: 10,
+  marginBottom: 30
+}
 const $propertyInfoContainer: ViewStyle = {
   paddingVertical: 20,
   paddingHorizontal: 20,
@@ -256,6 +286,9 @@ const $propertyInfoLabel: TextStyle = {
   fontSize: 15,
   fontFamily: typography.primary.light,
   paddingTop: 6,
+}
+const $map: ViewStyle = {
+  flex: 1
 }
 const $buttonContainer: ViewStyle = {
   paddingHorizontal: 15,
@@ -300,4 +333,12 @@ const $button: ViewStyle = {
   borderWidth: 0,
   borderRadius: 30,
   backgroundColor: colors.palette.primary50,
+}
+const $point: ViewStyle = {
+  width: 30,
+  justifyContent: "center",
+  alignItems: "center",
+  height: 30,
+  borderRadius: 100,
+  backgroundColor: colors.palette.secondary100
 }
