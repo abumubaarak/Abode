@@ -1,7 +1,7 @@
 import { AntDesign, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { StackScreenProps } from "@react-navigation/stack"
-import MapboxGL from '@rnmapbox/maps'
+import MapboxGL from "@rnmapbox/maps"
 import { observer } from "mobx-react-lite"
 import React, { FC, useEffect, useState } from "react"
 import { ActivityIndicator, Dimensions, Pressable, TextStyle, View, ViewStyle } from "react-native"
@@ -15,14 +15,12 @@ import useUser from "../hooks/useUser"
 import { AppStackParamList, AppStackScreenProps, navigate } from "../navigators"
 import { colors, typography } from "../theme"
 
-import Config from "../config"
 import { addWishlist, PROPERTY, removeWishlist, REQUEST, WISHLISTS } from "../utils/firebase"
 
 // REMOVE ME! ⬇️ This TS ignore will not be necessary after you've added the correct navigator param type
 // @ts-ignore
 export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "ListingDetails">> =
   observer(function ListingDetailsScreen() {
-    MapboxGL.setAccessToken(Config.MAP_TOKEN);
     const navigation = useNavigation()
     const sliderWidth = Dimensions.get("window").width
     const route = useRoute<RouteProp<AppStackParamList, "ListingDetails">>()
@@ -39,21 +37,21 @@ export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "Lis
     const [applied, setApplied] = useState<boolean>(false)
 
     useEffect(() => {
-      getDocument(PROPERTY, params.id)
+      getDocument(PROPERTY, params?.id)
       if (uid) {
-        queryRequest(REQUEST, "pId", "==", params.id, "tid")
-        queryDocument(WISHLISTS, "propertyId", "==", params.id, "uid")
+        queryRequest(REQUEST, "pId", "==", params?.id, "tid")
+        queryDocument(WISHLISTS, "propertyId", "==", params?.id, "uid")
       }
     }, [])
 
     const handleWishList = () => {
       if (uid) {
-        if (userWishList[0]?.propertyId === params.id) {
+        if (userWishList[0]?.propertyId === params?.id) {
           removeWishlist(userWishList[0]?.id)
         } else {
-          addWishlist(params.id)
+          addWishlist(params?.id)
         }
-        queryDocument(WISHLISTS, "propertyId", "==", params.id, "uid")
+        queryDocument(WISHLISTS, "propertyId", "==", params?.id, "uid")
       } else {
         navigate("Authentication")
       }
@@ -62,7 +60,7 @@ export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "Lis
     const handleInterested = () => {
       if (uid) {
         if (requestResponse[0]?.status === "accepted" || applied) {
-          navigate("Checkout", { id: params.id })
+          navigate("Checkout", { id: params?.id })
         } else {
           navigate("Apply", {
             lid: document?.uid,
@@ -70,7 +68,7 @@ export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "Lis
             address: document?.address,
             tid: uid,
             tName: displayName,
-            pId: params.id,
+            pId: params?.id,
             hasApplied: setApplied,
           })
         }
@@ -117,7 +115,7 @@ export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "Lis
             <Pressable onPress={handleWishList}>
               <View style={$heartIcon}>
                 <AntDesign
-                  name={userWishList[0]?.propertyId === params.id ? "heart" : "hearto"}
+                  name={userWishList[0]?.propertyId === params?.id ? "heart" : "hearto"}
                   size={20}
                   color={colors.palette.primary50}
                 />
@@ -177,23 +175,25 @@ export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "Lis
             <Text style={$propertyInfoLabel} text={document?.address} />
 
             <View style={$container}>
-              <MapboxGL.MapView styleURL={MapboxGL.StyleURL.Street} zoomEnabled={false} scrollEnabled={false} style={$map}>
+              <MapboxGL.MapView
+                styleURL={MapboxGL.StyleURL.Street}
+                zoomEnabled={false}
+                scrollEnabled={false}
+                style={$map}
+              >
                 <MapboxGL.Camera
                   animationMode="moveTo"
                   zoomLevel={14}
                   animationDuration={0}
                   type="CameraStop"
-                  centerCoordinate={document?.addresssLocation} />
+                  centerCoordinate={document?.addresssLocation}
+                />
 
-                <MapboxGL.PointAnnotation
-                  id="point"
-
-                  coordinate={document?.addresssLocation} >
+                <MapboxGL.PointAnnotation id="point" coordinate={document?.addresssLocation}>
                   <View style={$point}>
                     <AntDesign name="home" size={20} color="white" />
                   </View>
                 </MapboxGL.PointAnnotation>
-
               </MapboxGL.MapView>
             </View>
           </View>
@@ -269,7 +269,7 @@ const $container: ViewStyle = {
   width: "100%",
   height: 300,
   marginTop: 10,
-  marginBottom: 30
+  marginBottom: 30,
 }
 const $propertyInfoContainer: ViewStyle = {
   paddingVertical: 20,
@@ -288,7 +288,7 @@ const $propertyInfoLabel: TextStyle = {
   paddingTop: 6,
 }
 const $map: ViewStyle = {
-  flex: 1
+  flex: 1,
 }
 const $buttonContainer: ViewStyle = {
   paddingHorizontal: 15,
@@ -340,5 +340,5 @@ const $point: ViewStyle = {
   alignItems: "center",
   height: 30,
   borderRadius: 100,
-  backgroundColor: colors.palette.secondary100
+  backgroundColor: colors.palette.secondary100,
 }

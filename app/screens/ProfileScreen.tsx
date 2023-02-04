@@ -141,7 +141,7 @@ const $label: TextStyle = {
   fontSize: 17,
 }
 const $infoLabel: TextStyle = {
-  paddingTop: 10
+  paddingTop: 10,
 }
 const $subLabel: TextStyle = {
   fontFamily: typography.primary.normal,
