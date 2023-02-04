@@ -8,7 +8,7 @@ import {
   StyleProp,
   TextStyle,
   View,
-  ViewStyle
+  ViewStyle,
 } from "react-native"
 import { colors, spacing, typography } from "../theme"
 import { Text } from "./Text"
@@ -21,7 +21,7 @@ export interface SearchBarProps {
    * An optional style override useful for padding & margin.
    */
   style?: StyleProp<ViewStyle>
-  keyword: string,
+  keyword: string
   data: FirebaseFirestoreTypes.DocumentData[]
 }
 

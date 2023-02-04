@@ -11,7 +11,7 @@ import {
   DefaultTheme,
   NavigationContainer,
   NavigatorScreenParams,
-  useNavigation
+  useNavigation,
 } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { StackScreenProps } from "@react-navigation/stack"
@@ -28,7 +28,7 @@ import {
   MapSearchScreen,
   PropertySearchScreen,
   SingleSelectionScreen,
-  VerifyScreen
+  VerifyScreen,
 } from "../screens"
 import CheckoutScreen from "../screens/CheckoutScreen"
 import { ConversationScreen } from "../screens/ConversationScreen"
@@ -90,9 +90,10 @@ export type AppStackScreenProps<T extends keyof AppStackParamList> = StackScreen
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
 const Stack = createNativeStackNavigator<AppStackParamList>()
+const Modal = createNativeStackNavigator<AppStackParamList>()
 
 const AppStack = observer(function AppStack() {
-  MapboxGL.setAccessToken(Config.MAP_TOKEN);
+  MapboxGL.setAccessToken(Config.MAP_TOKEN)
 
   const [initializing, setInitializing] = useState(true)
   const navigation = useNavigation()
@@ -111,6 +112,11 @@ const AppStack = observer(function AppStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Home" component={HomeNavigator} />
+      <Stack.Screen
+        name="MapSearch"
+        component={MapSearchScreen}
+        options={{ animation: "slide_from_bottom" }}
+      />
 
       <Stack.Group
         screenOptions={{
@@ -149,9 +155,9 @@ const AppStack = observer(function AppStack() {
           animation: "slide_from_bottom",
         }}
       >
-        <Stack.Screen name="SingleSelection" component={SingleSelectionScreen} />
-        <Stack.Screen name="Authentication" component={AuthenticationScreen} />
-        <Stack.Screen
+        <Modal.Screen name="SingleSelection" component={SingleSelectionScreen} />
+        <Modal.Screen name="Authentication" component={AuthenticationScreen} />
+        <Modal.Screen
           name="Apply"
           component={ApplyScreen}
           options={{
@@ -159,13 +165,12 @@ const AppStack = observer(function AppStack() {
             headerRight: () => <Icon icon="x" onPress={() => navigation.goBack()} />,
           }}
         />
-        <Stack.Screen name="MapSearch" component={MapSearchScreen} />
       </Stack.Group>
     </Stack.Navigator>
   )
 })
 
-interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> { }
+interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> {}
 
 export const AppNavigator = observer(function AppNavigator(props: NavigationProps) {
   const colorScheme = useColorScheme()

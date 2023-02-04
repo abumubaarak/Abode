@@ -4,6 +4,7 @@ import { observer } from "mobx-react-lite"
 import * as React from "react"
 import { Pressable, StyleProp, TextStyle, View, ViewStyle } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
+import { navigate } from "../navigators"
 import { colors, typography } from "../theme"
 import { Card } from "./Card"
 
@@ -26,7 +27,7 @@ export const ListingCard = observer(function ListingCard(props: ListingCardProps
   const navigation = useNavigation()
 
   return (
-    <Pressable onPress={() => navigation.navigate("ListingDetails", { id: item.id })}>
+    <Pressable onPress={() => navigate("ListingDetails", { id: item.id })}>
       <Card
         preset="default"
         style={$container}

@@ -1,12 +1,14 @@
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons"
+import { AntDesign, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons"
+import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { StackScreenProps } from "@react-navigation/stack"
 import MapboxGL from "@rnmapbox/maps"
 import { observer } from "mobx-react-lite"
 
 import React, { FC, useState } from "react"
-import { Dimensions, Image, View, ViewStyle } from "react-native"
-import { Carousel } from "react-native-snap-carousel"
+import { Dimensions, Pressable, TextStyle, View, ViewStyle } from "react-native"
+import FastImage, { ImageStyle } from "react-native-fast-image"
+import Carousel from "react-native-snap-carousel"
 import { Close, ListingTag, Text } from "../components"
 import { AppStackParamList, AppStackScreenProps } from "../navigators"
 import { colors, spacing, typography } from "../theme"
@@ -24,23 +26,40 @@ export const MapSearchScreen: FC<StackScreenProps<AppStackScreenProps, "MapSearc
     const route = useRoute<RouteProp<AppStackParamList, "MapSearch">>()
     const params = route.params
     const listings = params?.listings
+    console.log(listings)
+    const handleShowDetails = (item: FirebaseFirestoreTypes.DocumentData) => {
+      navigation.navigate("ListingDetails", { id: item?.id })
+    }
     return (
       <View style={$container}>
-        <MapboxGL.MapView styleURL={MapboxGL.StyleURL.Street} style={$map}>
+        <MapboxGL.MapView
+          zoomEnabled={false}
+          pitchEnabled={false}
+          scrollEnabled={false}
+          styleURL={MapboxGL.StyleURL.Street}
+          style={$map}
+        >
           <Close />
 
           <MapboxGL.Camera
-            animationMode="moveTo"
-            zoomLevel={13}
-            animationDuration={0}
+            animationMode="flyTo"
+            zoomLevel={17}
+            animationDuration={2000}
             type="CameraStop"
-            centerCoordinate={[13.381777, 52.531677]} />
+            centerCoordinate={listings[activeSlide]?.addresssLocation}
+          />
+          {listings.map((item, index) => (
+            <MapboxGL.PointAnnotation
+              id="point"
+              key={item?.addresssLocation}
+              coordinate={item?.addresssLocation}
+            >
+              <View style={$point}>
+                <AntDesign name="home" size={20} color="white" />
+              </View>
+            </MapboxGL.PointAnnotation>
+          ))}
 
-          <MapboxGL.PointAnnotation
-            id="point"
-            coordinate={[13.381777, 52.531677]} >
-
-          </MapboxGL.PointAnnotation>
           <Carousel
             vertical={false}
             sliderWidth={sliderWidth}
@@ -48,18 +67,25 @@ export const MapSearchScreen: FC<StackScreenProps<AppStackScreenProps, "MapSearc
             activeSlideAlignment="start"
             inactiveSlideScale={1}
             inactiveSlideOpacity={1}
-            containerCustomStyle={{ marginBottom: 28 }}
+            containerCustomStyle={$carouselContainer}
             onSnapToItem={(index) => setActiveSlide(index)}
             data={listings}
             renderItem={({ item }) => (
-              <View style={{ paddingLeft: 10, flex: 1, justifyContent: "flex-end" }}>
-                <View style={{ flexDirection: "row", height: 100, backgroundColor: colors.white, borderRadius: 6, paddingLeft: 4 }}>
-                  <Image style={{ height: "85%", width: 123, alignSelf: "center", borderRadius: 4 }} source={require("../../assets/images/01.jpg")} />
-                  <View style={{ paddingHorizontal: 5, paddingVertical: 2, flexShrink: 1, justifyContent: "space-between" }}>
-                    <Text text={`${item.propertyType.toUpperCase()}`} style={{ fontSize: 13, color: colors.palette.secondary100, fontFamily: typography.primary.medium }} />
-                    <Text text={item?.name} numberOfLines={1} style={{ fontSize: 14 }} />
+              <Pressable onPress={() => handleShowDetails(item)} style={$cardContainer}>
+                <View style={$cardItem}>
+                  <FastImage
+                    source={{
+                      uri: item.remoteImages[0],
+                      priority: FastImage.priority.normal,
+                    }}
+                    resizeMode={FastImage.resizeMode.cover}
+                    style={$cardImage}
+                  />
+                  <View style={$infoContainer}>
+                    <Text text={`${item.propertyType.toUpperCase()}`} style={$pType} />
+                    <Text text={item?.name} numberOfLines={1} style={$pName} />
 
-                    <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                    <View style={$tagContainer}>
                       <ListingTag
                         label={`${item?.avaliableBedroom} Bed`}
                         icon={<Ionicons name="ios-bed" size={16} color={colors.gray100} />}
@@ -67,69 +93,46 @@ export const MapSearchScreen: FC<StackScreenProps<AppStackScreenProps, "MapSearc
                       <ListingTag
                         label={`${item?.avaliableBathroom} Bath`}
                         icon={
-                          <MaterialCommunityIcons name="bathtub-outline" size={16} color={colors.gray100} />
+                          <MaterialCommunityIcons
+                            name="bathtub-outline"
+                            size={16}
+                            color={colors.gray100}
+                          />
                         }
                       />
                       <ListingTag
                         label={`${item?.propertySize} sqft`}
                         icon={
-                          <MaterialCommunityIcons name="vector-square" size={16} color={colors.gray100} />
+                          <MaterialCommunityIcons
+                            name="vector-square"
+                            size={16}
+                            color={colors.gray100}
+                          />
                         }
                       />
                     </View>
 
-                    <View style={{ flexDirection: "row", }}>
-                      <Text text={`$${item.cost}`} style={{ fontFamily: typography.primary.semiBold, fontSize: 14, color: colors.palette.primary100 }} />
-                      <Text text="/month" style={{ fontSize: 10.5, color: colors.gray100 }} />
+                    <View style={$amountContainer}>
+                      <Text text={`$${item.cost}`} style={$amount} />
+                      <Text text="/month" style={$month} />
                     </View>
                   </View>
                 </View>
-              </View>
+              </Pressable>
             )}
           />
-
-
         </MapboxGL.MapView>
       </View>
-      // <Screen style={$root} preset="scroll">
-      //   <View style={$closeIcon}>
-      //     <View style={$closeView}>
-      //       <Icon icon="x" onPress={() => navigation.goBack()} />
-      //     </View>
-      //   </View>
-      // </Screen>
     )
   },
 )
 
 const $container: ViewStyle = {
-  flex: 1
+  flex: 1,
 }
 const $map: ViewStyle = {
-  flex: 1
+  flex: 1,
 }
-
-// < View style = { $container } >
-//   <MapboxGL.MapView styleURL={MapboxGL.StyleURL.Street} zoomEnabled={false} scrollEnabled={false} style={$map}>
-//     <MapboxGL.Camera
-//       animationMode="moveTo"
-//       zoomLevel={14}
-//       animationDuration={0}
-//       type="CameraStop"
-//       centerCoordinate={document?.addresssLocation} />
-
-//     <MapboxGL.PointAnnotation
-//       id="point"
-
-//       coordinate={document?.addresssLocation} >
-//       <View style={$point}>
-//         <AntDesign name="home" size={20} color="white" />
-//       </View>
-//     </MapboxGL.PointAnnotation>
-
-//   </MapboxGL.MapView>
-//           </View >
-
 const $root: ViewStyle = {
   flex: 1,
 }
@@ -145,4 +148,64 @@ const $closeView: ViewStyle = {
   borderRadius: 100,
   justifyContent: "center",
   alignItems: "center",
+}
+const $point: ViewStyle = {
+  width: 30,
+  justifyContent: "center",
+  alignItems: "center",
+  height: 30,
+  borderRadius: 100,
+  backgroundColor: colors.palette.primary100,
+}
+const $cardContainer: ViewStyle = {
+  zIndex: 1,
+  paddingLeft: 10,
+  flex: 1,
+  justifyContent: "flex-end",
+}
+const $cardItem: ViewStyle = {
+  flexDirection: "row",
+  height: 100,
+  backgroundColor: colors.white,
+  borderRadius: 6,
+  paddingLeft: 4,
+}
+const $cardImage: ImageStyle = {
+  height: "85%",
+  width: 123,
+  alignSelf: "center",
+  borderRadius: 4,
+}
+const $infoContainer: ViewStyle = {
+  paddingHorizontal: 5,
+  paddingVertical: 2,
+  flexShrink: 1,
+  justifyContent: "space-between",
+}
+const $pType: TextStyle = {
+  fontSize: 13,
+  color: colors.palette.secondary100,
+  fontFamily: typography.primary.medium,
+}
+const $tagContainer: ViewStyle = {
+  flexDirection: "row",
+  justifyContent: "space-between",
+}
+const $month: TextStyle = {
+  fontSize: 10.5,
+  color: colors.gray100,
+}
+const $amount: TextStyle = {
+  fontFamily: typography.primary.semiBold,
+  fontSize: 14,
+  color: colors.palette.primary100,
+}
+const $amountContainer: ViewStyle = {
+  flexDirection: "row",
+}
+const $pName: TextStyle = {
+  fontSize: 14,
+}
+const $carouselContainer: ViewStyle = {
+  marginBottom: 28,
 }
