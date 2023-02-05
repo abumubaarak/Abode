@@ -70,7 +70,7 @@ export const ListingCard = observer(function ListingCard(props: ListingCardProps
 
             <View style={$priceContainer}>
               <Text text={`$${data.cost}`} style={$priceLabel} />
-              <Text style={$pricePer} text=" /year" />
+              <Text style={$pricePer} text=" /month" />
             </View>
           </View>
         }
@@ -121,13 +121,12 @@ const $priceContainer: ViewStyle = {
 }
 
 const $priceLabel: TextStyle = {
-  color: colors.palette.primary200,
+  color: colors.palette.primary100,
   fontSize: 14,
   fontFamily: typography.primary.semiBold,
 }
 
 const $pricePer: TextStyle = {
-  fontSize: 10,
-  color: colors.gray,
-  fontFamily: typography.primary.medium,
+  fontSize: 10.5,
+  color: colors.gray100,
 }
