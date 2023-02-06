@@ -7,25 +7,30 @@ import React, { FC, useEffect, useState } from "react"
 import { ActivityIndicator, Dimensions, Pressable, TextStyle, View, ViewStyle } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
 import { Carousel, Pagination } from "react-native-snap-carousel"
+import { useToast } from "react-native-toast-notifications"
 import { Button, ListingTag, Screen, Text } from "../components"
 import LisitingFeaturesTag from "../components/LisitingFeaturesTag"
 import { Loader } from "../components/Loader"
+
 import useFirestore from "../hooks/useFirestore"
 import useUser from "../hooks/useUser"
 import { AppStackParamList, AppStackScreenProps, navigate } from "../navigators"
 import { colors, typography } from "../theme"
 
-import { addWishlist, PROPERTY, removeWishlist, REQUEST, WISHLISTS } from "../utils/firebase"
+import { addWishlist, PROPERTY, removeWishlist, REQUEST, USERS, WISHLISTS } from "../utils/firebase"
 
 // REMOVE ME! ⬇️ This TS ignore will not be necessary after you've added the correct navigator param type
 // @ts-ignore
 export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "ListingDetails">> =
   observer(function ListingDetailsScreen() {
     const navigation = useNavigation()
+    const toast = useToast();
+
     const sliderWidth = Dimensions.get("window").width
     const route = useRoute<RouteProp<AppStackParamList, "ListingDetails">>()
     const params = route.params
     const { getDocument, document, isLoading } = useFirestore()
+    const { getDocument: getProfile, document: profile, isLoading: profileIsLoading } = useFirestore()
     const { queryDocument, data: userWishList, isLoading: wishlistIsLoading } = useFirestore()
     const {
       queryDocument: queryRequest,
@@ -38,6 +43,7 @@ export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "Lis
 
     useEffect(() => {
       getDocument(PROPERTY, params?.id)
+      getProfile(USERS, uid)
       if (uid) {
         queryRequest(REQUEST, "pId", "==", params?.id, "tid")
         queryDocument(WISHLISTS, "propertyId", "==", params?.id, "uid")
@@ -58,21 +64,30 @@ export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "Lis
     }
 
     const handleInterested = () => {
+
       if (uid) {
-        if (requestResponse[0]?.status === "accepted" || applied) {
-          navigate("Checkout", { id: params?.id })
-        } else {
-          navigate("Apply", {
-            lid: document?.uid,
-            pName: document?.name,
-            address: document?.address,
-            tid: uid,
-            tName: displayName,
-            pId: params?.id,
-            hasApplied: setApplied,
+        if (!profile.isVerify) {
+          toast.show("You need to verify your account before you can apply for rent.", {
+            type: "danger",
+            placement: "top",
           })
+        } else {
+          if (requestResponse[0]?.status === "accepted" || applied) {
+            navigate("Checkout", { id: params?.id })
+          } else {
+            navigate("Apply", {
+              lid: document?.uid,
+              pName: document?.name,
+              address: document?.address,
+              tid: uid,
+              tName: displayName,
+              pId: params?.id,
+              hasApplied: setApplied,
+            })
+          }
         }
-      } else {
+      }
+      else {
         navigate("Authentication")
       }
     }

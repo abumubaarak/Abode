@@ -15,6 +15,7 @@ import { useFonts } from "expo-font"
 import { StripeProvider } from "@stripe/stripe-react-native"
 import "./i18n"
 
+import { ToastProvider } from 'react-native-toast-notifications'
 import "./utils/ignoreWarnings"
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
@@ -111,13 +112,16 @@ function App(props: AppProps) {
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
       <ErrorBoundary catchErrors={Config.catchErrors}>
         <StripeProvider publishableKey={Config.PUBLISHABLE_KEY}>
-          <BottomSheetModalProvider>
-            <AppNavigator
-              linking={linking}
-              initialState={initialNavigationState}
-              onStateChange={onNavigationStateChange}
-            />
-          </BottomSheetModalProvider>
+          <ToastProvider offsetTop={40}>
+            <BottomSheetModalProvider>
+              <AppNavigator
+                linking={linking}
+                initialState={initialNavigationState}
+                onStateChange={onNavigationStateChange}
+              />
+            </BottomSheetModalProvider>
+          </ToastProvider>
+
         </StripeProvider>
       </ErrorBoundary>
     </SafeAreaProvider>
