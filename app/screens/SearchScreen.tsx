@@ -8,7 +8,7 @@ import {
   Pressable,
   TextStyle,
   View,
-  ViewStyle,
+  ViewStyle
 } from "react-native"
 import Carousel from "react-native-snap-carousel"
 import { FeaturedImage, Icon, ListingCard, Screen, Text } from "../components"

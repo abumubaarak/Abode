@@ -1,13 +1,15 @@
 import { FontAwesome } from '@expo/vector-icons'
+import { appleAuth } from '@invertase/react-native-apple-authentication'
 import auth from "@react-native-firebase/auth"
 import { GoogleSignin } from "@react-native-google-signin/google-signin"
 import { useNavigation } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
+
 import React, { useEffect, useState } from "react"
 import { ActivityIndicator, ImageBackground, TextStyle, View, ViewStyle } from "react-native"
 import { Button, Close, Icon, Screen, Text } from "../components"
 import { colors, spacing, typography } from "../theme"
-import { onGoogleButtonPress } from "../utils/firebase"
+import { onAppleButtonPress, onGoogleButtonPress } from "../utils/firebase"
 
 GoogleSignin.configure({
   scopes: ["https://www.googleapis.com/auth/drive.readonly"],
@@ -25,10 +27,26 @@ export const AuthenticationScreen = observer(function AuthenticationScreen() {
     }
   }, [auth().currentUser?.uid])
 
+  useEffect(() => {
+    // onCredentialRevoked returns a function that will remove the event listener. useEffect will call this function when the component unmounts
+    return appleAuth.onCredentialRevoked(async () => {
+      console.warn('If this function executes, User Credentials have been Revoked');
+    });
+  }, []);
+
   const continueWithGoogle = () => {
     setLoading(true)
-    onGoogleButtonPress().then(() => setLoading(false))
+    onGoogleButtonPress()
+      .then(() => setLoading(false))
+      .catch(() => setLoading(false))
   }
+  const continueWithApple = () => {
+    setLoading(true)
+    onAppleButtonPress()
+      .then(() => setLoading(false))
+      .catch(() => setLoading(false))
+  }
+
   return (
     <Screen statusBarStyle="light" style={$root}>
       <View style={$topContainer}>
@@ -60,11 +78,24 @@ export const AuthenticationScreen = observer(function AuthenticationScreen() {
             textStyle={[$authText, { color: colors?.black }]}
             style={$authButton}
           />
+
           <Button
-            LeftAccessory={(props) => <FontAwesome name="apple" size={24} color="white" />}
+            LeftAccessory={(props) =>
+              isLoading ? (
+                <ActivityIndicator
+                  animating={isLoading}
+                  size="small"
+                  color={colors?.palette.primary300}
+                />
+              ) : (
+                <FontAwesome name="apple" size={24} color="white" />
+              )
+            }
             text="Continue with Apple"
             preset="default"
             disabled={isLoading}
+            onPress={() => continueWithApple()}
+
             textStyle={[$authText, { color: colors?.background }]}
             style={[$authButton, { backgroundColor: "black", borderWidth: 0 }]}
           />
