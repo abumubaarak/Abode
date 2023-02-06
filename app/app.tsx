@@ -10,24 +10,25 @@
  * if you're interested in adding screens and navigators.
  */
 
-import { useFonts } from "expo-font"
+import { AntDesign } from '@expo/vector-icons';
+import { StripeProvider } from "@stripe/stripe-react-native";
+import { useFonts } from "expo-font";
+import "./i18n";
 
-import { StripeProvider } from "@stripe/stripe-react-native"
-import "./i18n"
+import { ToastProvider } from 'react-native-toast-notifications';
+import "./utils/ignoreWarnings";
 
-import "./utils/ignoreWarnings"
-
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
-import * as Linking from "expo-linking"
-import React from "react"
-import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
-import Config from "./config"
-import { useInitialRootStore } from "./models"
-import { AppNavigator, useNavigationPersistence } from "./navigators"
-import { ErrorBoundary } from "./screens/ErrorScreen/ErrorBoundary"
-import { setupReactotron } from "./services/reactotron"
-import { customFontsToLoad } from "./theme"
-import * as storage from "./utils/storage"
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import * as Linking from "expo-linking";
+import React from "react";
+import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context";
+import Config from "./config";
+import { useInitialRootStore } from "./models";
+import { AppNavigator, useNavigationPersistence } from "./navigators";
+import { ErrorBoundary } from "./screens/ErrorScreen/ErrorBoundary";
+import { setupReactotron } from "./services/reactotron";
+import { customFontsToLoad, typography } from "./theme";
+import * as storage from "./utils/storage";
 
 // Set up Reactotron, which is a free desktop app for inspecting and debugging
 // React Native apps. Learn more here: https://github.com/infinitered/reactotron
@@ -111,13 +112,20 @@ function App(props: AppProps) {
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
       <ErrorBoundary catchErrors={Config.catchErrors}>
         <StripeProvider publishableKey={Config.PUBLISHABLE_KEY}>
-          <BottomSheetModalProvider>
-            <AppNavigator
-              linking={linking}
-              initialState={initialNavigationState}
-              onStateChange={onNavigationStateChange}
-            />
-          </BottomSheetModalProvider>
+          <ToastProvider offsetTop={40}
+            textStyle={{ fontFamily: typography.primary.normal, paddingRight: 15 }}
+
+            dangerIcon={<AntDesign name="infocirlceo" size={24} color="white" />}
+          >
+            <BottomSheetModalProvider>
+              <AppNavigator
+                linking={linking}
+                initialState={initialNavigationState}
+                onStateChange={onNavigationStateChange}
+              />
+            </BottomSheetModalProvider>
+          </ToastProvider>
+
         </StripeProvider>
       </ErrorBoundary>
     </SafeAreaProvider>
