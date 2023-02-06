@@ -1,3 +1,4 @@
+import { appleAuth } from '@invertase/react-native-apple-authentication'
 import auth from "@react-native-firebase/auth"
 import firestore from "@react-native-firebase/firestore"
 import { GoogleSignin } from "@react-native-google-signin/google-signin"
@@ -27,16 +28,47 @@ export async function onGoogleButtonPress() {
   // Sign-in the user with the credential
   return auth()
     .signInWithCredential(googleCredential)
-    .then(() => createUser())
+    .then(() => createUser("google"))
 }
 
-export const createUser = () => {
-  firestore().collection(USERS).doc(auth().currentUser.uid).set({
-    displayName: auth().currentUser.displayName,
-    email: auth().currentUser.email,
-    uid: auth().currentUser.uid,
-    userType: "tenant",
-  })
+export async function onAppleButtonPress() {
+  // Start the sign-in request
+  const appleAuthRequestResponse = await appleAuth.performRequest({
+    requestedOperation: appleAuth.Operation.LOGIN,
+    requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
+  });
+
+  // Ensure Apple returned a user identityToken
+  if (!appleAuthRequestResponse.identityToken) {
+    throw new Error('Apple Sign-In failed - no identify token returned');
+  }
+
+  // Create a Firebase credential from the response
+  const { identityToken, nonce } = appleAuthRequestResponse;
+  const appleCredential = auth.AppleAuthProvider.credential(identityToken, nonce);
+  console.log(appleCredential, appleAuthRequestResponse)
+  // Sign the user in with the credential
+  const displayName = `${appleAuthRequestResponse.fullName.givenName} ${appleAuthRequestResponse.fullName.familyName}`
+  console.log(displayName)
+  return auth().signInWithCredential(appleCredential).then(() => createUser("apple", displayName));
+}
+
+export const createUser = (type: string, name: string = auth().currentUser.displayName) => {
+  const document = firestore().collection(USERS).doc(auth().currentUser.uid)
+  if (!document.id) {
+    document.set({
+      displayName: type === "google" ? auth().currentUser.displayName : name,
+      email: auth().currentUser.email,
+      uid: auth().currentUser.uid,
+      userType: "tenant",
+      profession: "",
+      dob: undefined,
+      language: undefined,
+      isVerify: false,
+      gender: undefined,
+    })
+  }
+
 }
 
 export const addWishlist = (propertyId: string) => {

@@ -26,9 +26,10 @@ export const ProfileScreen: FC<HomeTabScreenProps<"Profile">> = observer(functio
 
   const handleLogout = () => {
     auth().signOut()
+    navigate("Search")
   }
 
-  const dob = document?.dob.toDate()
+  const dob = document?.dob?.toDate()
 
   const age = differenceInYears(new Date(), dob)
 
@@ -36,11 +37,11 @@ export const ProfileScreen: FC<HomeTabScreenProps<"Profile">> = observer(functio
     <Screen style={$root} preset="scroll">
       <View style={[$card, { alignItems: "center" }]}>
         <View style={$avatarContainer}>
-          <Text text={avatarName(displayName)} style={$avatarLabel} />
+          <Text text={avatarName(document?.displayName)} style={$avatarLabel} />
         </View>
         <View style={$userInfo}>
           <View style={$nameConatiner}>
-            <Text text={displayName} style={$label} />
+            <Text text={document?.displayName} style={$label} />
             {document?.isVerify ? (
               <MaterialIcons name="verified" size={24} color={colors.palette.primary100} />
             ) : (
