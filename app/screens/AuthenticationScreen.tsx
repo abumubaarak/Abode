@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
 
 import React, { useEffect, useState } from "react"
-import { ActivityIndicator, ImageBackground, TextStyle, View, ViewStyle } from "react-native"
+import { ActivityIndicator, ImageBackground, Platform, TextStyle, View, ViewStyle } from "react-native"
 import { Button, Close, Icon, Screen, Text } from "../components"
 import { colors, spacing, typography } from "../theme"
 import { onAppleButtonPress, onGoogleButtonPress } from "../utils/firebase"
@@ -78,8 +78,7 @@ export const AuthenticationScreen = observer(function AuthenticationScreen() {
             textStyle={[$authText, { color: colors?.black }]}
             style={$authButton}
           />
-
-          <Button
+          {Platform.OS !== "android" && <Button
             LeftAccessory={(props) =>
               isLoading ? (
                 <ActivityIndicator
@@ -98,7 +97,8 @@ export const AuthenticationScreen = observer(function AuthenticationScreen() {
 
             textStyle={[$authText, { color: colors?.background }]}
             style={[$authButton, { backgroundColor: "black", borderWidth: 0 }]}
-          />
+          />}
+
         </View>
       </View>
     </Screen>
@@ -117,8 +117,7 @@ const $authText: TextStyle = {
 }
 
 const $buttonGroup: ViewStyle = {
-  marginTop: 25
-
+  marginTop: Platform.OS === "ios" ? 25 : 50
 }
 const $authButton: ViewStyle = {
   width: "100%",
