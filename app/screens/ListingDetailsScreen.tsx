@@ -67,7 +67,7 @@ export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "Lis
 
       if (uid) {
         if (!profile.isVerify) {
-          toast.show("You need to verify your account before you can apply for rent.", {
+          toast.show("You need to verify your account before applying for a rent", {
             type: "danger",
             placement: "top",
           })
