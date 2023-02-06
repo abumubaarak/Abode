@@ -1,4 +1,3 @@
-import { useNavigation } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
 import React, { FC, useEffect } from "react"
 import {
@@ -13,14 +12,13 @@ import {
 import Carousel from "react-native-snap-carousel"
 import { FeaturedImage, Icon, ListingCard, Screen, Text } from "../components"
 import useFirestore from "../hooks/useFirestore"
-import { HomeTabScreenProps } from "../navigators"
+import { HomeTabScreenProps, navigate } from "../navigators"
 import { colors, spacing, typography } from "../theme"
 
 const HORIZONTAL_MARGIN = 15
 
 export const SearchScreen: FC<HomeTabScreenProps<"Search">> = observer(function SearchScreen() {
   const { getCollection, data, isLoading } = useFirestore()
-  const { navigate } = useNavigation()
   // const { data, isLoading, error } = useFirestoreQuery(["Property"], ref);
 
   useEffect(() => {
@@ -40,7 +38,7 @@ export const SearchScreen: FC<HomeTabScreenProps<"Search">> = observer(function 
     <Screen style={$root} preset="auto">
       <ImageBackground style={$banner} resizeMode="cover" source={bannerTop}>
         <Text text={`Discover a place \nyou'll love to live`} style={$bannerLabel} />
-        <Pressable onPress={() => navigate("PropertySearch")}>
+        <Pressable onPress={() => navigate("AutoComplete")}>
           <View style={$searchContainer}>
             <View style={$search}>
               <Icon icon="search" style={$searchIcon} />

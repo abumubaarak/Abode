@@ -1,4 +1,3 @@
-import { useNavigation } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
 import * as React from "react"
 import {
@@ -8,8 +7,9 @@ import {
   Pressable,
   StyleProp,
   TextStyle,
-  ViewStyle,
+  ViewStyle
 } from "react-native"
+import { navigate } from "../navigators"
 import { colors, typography } from "../theme"
 import { Text } from "./Text"
 
@@ -24,7 +24,6 @@ export interface FeaturedImageProps {
 
 export const FeaturedImage = observer(function FeaturedImage(props: FeaturedImageProps) {
   const { image, text } = props
-  const { navigate } = useNavigation()
 
   return (
     <ImageBackground source={image} imageStyle={$imageContainerStyle} style={$containerStyle}>

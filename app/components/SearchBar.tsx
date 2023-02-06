@@ -8,7 +8,7 @@ import {
   StyleProp,
   TextStyle,
   View,
-  ViewStyle,
+  ViewStyle
 } from "react-native"
 import { colors, spacing, typography } from "../theme"
 import { Text } from "./Text"
@@ -33,7 +33,7 @@ export const SearchBar = observer(function SearchBar(props: SearchBarProps) {
 
   return (
     <View style={$container}>
-      <Pressable style={$searchContainer}>
+      <Pressable style={$searchContainer} onPress={() => navigate("AutoComplete")}>
         <View style={$search}>
           <Pressable onPress={() => goBack()}>
             {Platform.OS === "ios" ? (

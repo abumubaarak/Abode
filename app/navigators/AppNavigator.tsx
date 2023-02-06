@@ -11,7 +11,7 @@ import {
   DefaultTheme,
   NavigationContainer,
   NavigatorScreenParams,
-  useNavigation,
+  useNavigation
 } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { StackScreenProps } from "@react-navigation/stack"
@@ -28,8 +28,9 @@ import {
   MapSearchScreen,
   PropertySearchScreen,
   SingleSelectionScreen,
-  VerifyScreen,
+  VerifyScreen
 } from "../screens"
+import { AutoCompleteScreen } from "../screens/AutoCompleteScreen"
 import CheckoutScreen from "../screens/CheckoutScreen"
 import { ConversationScreen } from "../screens/ConversationScreen"
 import { colors } from "../theme"
@@ -53,6 +54,7 @@ export type AppStackParamList = {
   Welcome: undefined
   Home: NavigatorScreenParams<HomeNavigatorParamList> // @demo remove-current-line
   Payment: undefined
+  AutoComplete: undefined
   MapSearch: { listings: FirebaseFirestoreTypes.DocumentData[] }
   Verify: undefined
   SingleSelection: {
@@ -112,6 +114,8 @@ const AppStack = observer(function AppStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Home" component={HomeNavigator} />
+      <Stack.Screen name="AutoComplete" component={AutoCompleteScreen} />
+
       <Stack.Screen
         name="MapSearch"
         component={MapSearchScreen}
@@ -170,7 +174,7 @@ const AppStack = observer(function AppStack() {
   )
 })
 
-interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> {}
+interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> { }
 
 export const AppNavigator = observer(function AppNavigator(props: NavigationProps) {
   const colorScheme = useColorScheme()
