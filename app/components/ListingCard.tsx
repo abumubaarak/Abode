@@ -1,11 +1,11 @@
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons"
-import { useNavigation } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
 import * as React from "react"
 import { Pressable, StyleProp, TextStyle, View, ViewStyle } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
 import { navigate } from "../navigators"
 import { colors, typography } from "../theme"
+import { currencyFormat } from "../utils"
 import { Card } from "./Card"
 
 import { ListingTag } from "./ListingTag"
@@ -24,8 +24,6 @@ const RADIUS = 10
 export const ListingCard = observer(function ListingCard(props: ListingCardProps) {
   const { item } = props
   const data = item
-  const navigation = useNavigation()
-
   return (
     <Pressable onPress={() => navigate("ListingDetails", { id: item.id })}>
       <Card
@@ -69,7 +67,7 @@ export const ListingCard = observer(function ListingCard(props: ListingCardProps
             </View>
 
             <View style={$priceContainer}>
-              <Text text={`$${data.cost}`} style={$priceLabel} />
+              <Text text={`${currencyFormat(data.cost)}`} style={$priceLabel} />
               <Text style={$pricePer} text=" /month" />
             </View>
           </View>
