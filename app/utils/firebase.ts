@@ -61,6 +61,11 @@ export const createUser = (type: string, name: string = auth().currentUser.displ
       email: auth().currentUser.email,
       uid: auth().currentUser.uid,
       userType: "tenant",
+      profession: "",
+      dob: undefined,
+      language: undefined,
+      isVerify: false,
+      gender: undefined,
     })
   }
 
