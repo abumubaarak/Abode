@@ -5,9 +5,11 @@ import React from "react"
 
 import { TextStyle, ViewStyle } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import useUser from "../hooks/useUser"
 import { InboxScreen, PaymentScreen, ProfileScreen, SearchScreen, WishlistScreen } from "../screens"
 import { colors, typography } from "../theme"
 import { AppStackParamList, AppStackScreenProps } from "./AppNavigator"
+import { navigate } from "./navigationUtilities"
 
 export type HomeNavigatorParamList = {
   Search: undefined
@@ -26,6 +28,7 @@ const Tab = createBottomTabNavigator<HomeNavigatorParamList>()
 
 export const HomeNavigator = () => {
   const { bottom } = useSafeAreaInsets()
+  const { displayName, email, uid } = useUser()
 
   return (
     <Tab.Navigator
@@ -102,6 +105,17 @@ export const HomeNavigator = () => {
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
+        listeners={{
+          tabPress: e => {
+            e.preventDefault();
+            if (!uid) {
+              navigate("Authentication")
+            } else {
+              navigate("Profile")
+
+            }
+          }
+        }}
         options={{
           headerShown: true,
           tabBarIcon: ({ focused }) => (

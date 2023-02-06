@@ -26,6 +26,7 @@ export const ProfileScreen: FC<HomeTabScreenProps<"Profile">> = observer(functio
 
   const handleLogout = () => {
     auth().signOut()
+    navigate("Search")
   }
 
   const dob = document?.dob?.toDate()
