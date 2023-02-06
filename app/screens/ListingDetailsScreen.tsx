@@ -152,7 +152,7 @@ export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "Lis
               </View>
               <View style={$priceContainer}>
                 <Text text={`$${document?.cost}`} style={$priceLabel} />
-                <Text style={$pricePer} text="/year" />
+                <Text style={$pricePer} text="/month" />
               </View>
             </View>
 
@@ -320,8 +320,7 @@ const $priceLabel: TextStyle = {
 
 const $pricePer: TextStyle = {
   fontSize: 14,
-  color: colors.gray,
-  fontFamily: typography.primary.medium,
+  color: colors.gray100,
 }
 
 const $buttonLabel: TextStyle = {
