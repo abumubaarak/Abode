@@ -24,7 +24,7 @@ export const ConversationScreen: FC<StackScreenProps<AppStackScreenProps, "Conve
     const params = route.params
     const [conversation, setConversation] = useState([])
     const [joined, setJoined] = useState(false)
-    const socket = io("https://1099-105-112-121-110.eu.ngrok.io")
+    const socket = io("https://abode-backend.fly.dev:9000")
     const { message_id, landlord_id, tenant_id } = params
     const JOINED_USER = `${auth().currentUser.uid}${params.message_id}`
 
