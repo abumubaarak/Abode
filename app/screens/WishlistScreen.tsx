@@ -3,7 +3,7 @@ import { ContentStyle, FlashList } from "@shopify/flash-list"
 import { observer } from "mobx-react-lite"
 import React, { FC, useEffect } from "react"
 import { View, ViewStyle } from "react-native"
-import { ListingCard } from "../components"
+import { Empty, ListingCard } from "../components"
 import { Loader } from "../components/Loader"
 import useFirestore from "../hooks/useFirestore"
 import { HomeTabScreenProps } from "../navigators"
@@ -19,6 +19,7 @@ export const WishlistScreen: FC<HomeTabScreenProps<"Wishlist">> = observer(
     }, [])
 
     if (isLoading) return <Loader />
+    if (userWishList.length === 0) return <Empty message="Nothing in Wishlist" />
 
     return (
       <FlashList

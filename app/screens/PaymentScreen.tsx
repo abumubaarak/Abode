@@ -20,7 +20,8 @@ export const PaymentScreen: FC<AppStackScreenProps<"Payment">> = observer(functi
   }, [isFocused])
 
   if (isLoading) return <Loader />
-  if (data.length === 0) return <Empty message="No Payment." />
+
+  if (data.length === 0) return <Empty message="Nothing in Payment." />
 
   return (
     <FlashList

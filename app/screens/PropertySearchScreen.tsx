@@ -4,7 +4,7 @@ import { FlashList } from "@shopify/flash-list"
 import { observer } from "mobx-react-lite"
 import React, { FC, useEffect } from "react"
 import { Dimensions, View, ViewStyle } from "react-native"
-import { ListingCard, Screen, SearchBar } from "../components"
+import { Empty, ListingCard, Screen, SearchBar } from "../components"
 import { Loader } from "../components/Loader"
 import useFirestore from "../hooks/useFirestore"
 import { AppStackParamList, AppStackScreenProps } from "../navigators"
@@ -23,24 +23,29 @@ export const PropertySearchScreen: FC<StackScreenProps<AppStackScreenProps, "Pro
 
     useEffect(() => {
       queryDocuments(PROPERTY, "city", params.keyword)
-    }, [])
+    }, [route.params])
 
+    if (isLoading) return <Loader />
     return (
       <Screen style={$root} preset="scroll" safeAreaEdges={["top"]}>
         <SearchBar keyword={params.keyword} data={data} />
 
-        {isLoading && <Loader />}
-        {data && !isLoading && (
-          <View style={$listContainer}>
-            <FlashList
-              data={data}
-              ItemSeparatorComponent={() => <View style={$separator} />}
-              renderItem={({ item }) => <ListingCard key={item.id} item={item} />}
-              estimatedItemSize={200}
-            />
-          </View>
-        )}
-      </Screen>
+        {
+          !isLoading && data.length === 0 ?
+            <View style={{ marginTop: 20, alignItems: "center" }}>
+              <Empty message="Not found." />
+            </View> :
+            <View style={$listContainer}>
+              <FlashList
+                data={data}
+                ItemSeparatorComponent={() => <View style={$separator} />}
+                renderItem={({ item }) => <ListingCard key={item.id} item={item} />}
+                estimatedItemSize={200}
+              />
+            </View>
+        }
+
+      </Screen >
     )
   })
 

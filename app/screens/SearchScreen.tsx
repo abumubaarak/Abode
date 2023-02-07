@@ -11,6 +11,7 @@ import {
 } from "react-native"
 import Carousel from "react-native-snap-carousel"
 import { FeaturedImage, Icon, ListingCard, Screen, Text } from "../components"
+import { Loader } from "../components/Loader"
 import useFirestore from "../hooks/useFirestore"
 import { HomeTabScreenProps, navigate } from "../navigators"
 import { colors, spacing, typography } from "../theme"
@@ -50,7 +51,7 @@ export const SearchScreen: FC<HomeTabScreenProps<"Search">> = observer(function 
 
       <View style={$recomContainer}>
         <Text text="Recommeded" style={$label} />
-        {isLoading && <Text text="Loading..." />}
+        {isLoading && <Loader />}
         {!isLoading && (
           <Carousel
             vertical={false}
