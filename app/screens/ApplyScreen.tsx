@@ -1,3 +1,4 @@
+import { MaterialIcons } from "@expo/vector-icons"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
@@ -10,6 +11,7 @@ import { AppStackParamList, AppStackScreenProps } from "../navigators"
 import { colors, spacing, typography } from "../theme"
 import { avatarName } from "../utils"
 import { USERS } from "../utils/firebase"
+
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../models"
 
@@ -66,7 +68,10 @@ export const ApplyScreen: FC<StackScreenProps<AppStackScreenProps, "Apply">> = o
                 <Text text={avatarName(landlord?.displayName)} style={$avatarLabel} />
               </View>
               <View style={$labelContainer}>
-                <Text numberOfLines={1} style={$labelName} text={landlord?.displayName} />
+                <View style={$nameContainer}>
+                  <Text numberOfLines={1} style={$labelName} text={landlord?.displayName} />
+                  <MaterialIcons name="verified" size={24} color={colors.palette.primary100} />
+                </View>
                 <Text text="Landlord" style={$labelTag} />
               </View>
             </View>
@@ -142,6 +147,11 @@ const $landlordProfileContainer: ViewStyle = {
   alignItems: "center",
   marginTop: 20,
   paddingBottom: spacing.medium,
+}
+const $nameContainer: ViewStyle = {
+  flexDirection: "row",
+  alignItems: "center"
+
 }
 const $avatar: ViewStyle = {
   alignItems: "center",

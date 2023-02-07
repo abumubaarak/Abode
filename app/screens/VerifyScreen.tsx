@@ -53,7 +53,6 @@ export const VerifyScreen: FC<StackScreenProps<AppStackScreenProps, "Verify">> =
             render={({ field: { onChange, value } }) => (
               <InputField
                 marginTop={30}
-                keyboardType="numeric"
                 label="What's your profession"
                 onChange={onChange}
               />
