@@ -1,46 +1,57 @@
-<p align="center">
-  <a>
-    <img width="100px" src="https://gray-polonium-ebf.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fb46656c5-ce1a-432a-80ba-f6ce18f0db53%2Flogo_icon3.png?table=block&id=432cd7cc-82e0-438d-8962-e007d7e39d55&spaceId=e793d939-44d0-487a-b5ff-842b2ce8e4c1&width=250&userId=&cache=v2">
-  </a>
-  <h1 align="center">Abode</h1>  
+<p>
+<a href="#download-the-app">
+<img  src="./brand/featured.png"/>
+</a>
+<h1 align="center">Abode for Tenants</h1> 
+<p>Abode is a home rental platform that allows landlords to publish listings, and tenants can find and secure their next home with ease.</p> 
 </p>
 
-> Abode is a home rental platform that allows landlord to publish listings, and tenants can find and secure 
-> their next home with ease.
+<img  src="./brand/stepper.png"/>
 
-## General Features
+## Features ✨
+- Browse Listings.
+- Apply for listing.
+- View Listings.
+- Instant Messaging.
+- Payment.
+- Search.
+- Wishlists.
 
-- Authentication(Google | Apple)
-- Instant Messaging ⚡
-- Profile
-- Internationalization
+## Architecture :gear:	
+<img  src="./brand/arc.png"/>
 
-## Tenant features
-
-- Browse Listing 🔍
-- Apply for rent 📋
-- Payment 💳
-- Wishlist 🔖
-
-## Landlord Features
-
-- Insight Dashboard 📈
-- Create Listings 🏠
-- Accept or Decline tenant request ⌛️ 
-- Track Payment 💳 
-- Manage Listings 🏠
-
-## Tech Stack 🛠️
-
-- React Native
-- Expo
+## Tech Stack 🔨
+- React❤️Native
 - TypeScript
+- Ignite
 - React Navigation
+- Mapbox
+- Firebase
+- Socket.io-client
 - MobX State Tree
+- React Hook Form
+- Moti
+- FlashList
 
 
-## Screenshots
 
-iOS
+## Screenshot 📸
+<img width="270px" src="./brand/01.png"> <img width="270px" src="./brand/02.png"> <img width="270px" src="./brand/03.png">
+<img width="270px" src="./brand/04.png"> <img width="270px" src="./brand/05.png"> <img width="270px" src="./brand/06.png">
+<img width="270px" src="./brand/07.png"> <img width="270px" src="./brand/08.png"> <img width="270px" src="./brand/09.png">
 
-<img width="200px" src="https://gray-polonium-ebf.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F5a282a50-07ae-4e66-a3a5-b077698f2303%2FiPhone_11_Pro_Max.png?id=e8185dad-a94d-405f-88cc-4d3218b3ab0f&table=block&spaceId=e793d939-44d0-487a-b5ff-842b2ce8e4c1&width=1320&userId=&cache=v2">
+
+
+## Download the app📱
+- [App Store](https://www.a.com/us/)
+- [Google Play](https://www.a.com/us/) 
+- [Check out Abode for landlord app](https://github.com/abumubarak-dev/Abode-landlords)
+---
+
+## Author
+Built :hammer_and_wrench: with :heart: by Abu Mubarak
+- [Twitter](https://twitter.com/abumubarakdev)
+- [Linkedin](https://www.linkedin.com/in/abu-mubarak-035652182/)
+- [Mail](https://mail.google.com/mail/u/0/?fs=1&to=abumubarak.dev@gmail.com&tf=cm)
+
+
