@@ -13,7 +13,6 @@ production = ENV["PRODUCTION"] == "1"
 
 target 'Abode' do
   use_expo_modules!
-  pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
   post_integrate do |installer|
     begin
       expo_patch_react_imports!(installer)
