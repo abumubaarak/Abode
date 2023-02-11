@@ -156,8 +156,8 @@ const $nameContainer: ViewStyle = {
 const $avatar: ViewStyle = {
   alignItems: "center",
   justifyContent: "center",
-  height: 65,
-  width: 65,
+  height: 55,
+  width: 55,
   backgroundColor: colors.palette.primary100,
   borderRadius: 100,
 }
