@@ -8,6 +8,7 @@ buildscript {
         minSdkVersion = 23
         compileSdkVersion = 33
         targetSdkVersion = 31
+        RNMapboxMapsImpl = "mapbox" 
         kotlin_version = "1.6.0" // Update this to your version
         googlePlayServicesAuthVersion = "19.2.0" // <--- use this version or newer
 
@@ -50,6 +51,19 @@ allprojects {
             // older versions over there.
             content {
                 excludeGroup "com.facebook.react"
+            }
+        }
+        maven {
+            url 'https://api.mapbox.com/downloads/v2/releases/maven'
+            authentication {
+                basic(BasicAuthentication)
+            }
+            credentials {
+                // Do not change the username below.
+                // This should always be `mapbox` (not your username).
+                username = 'mapbox'
+                // Use the secret token you stored in gradle.properties as the password
+                password = 'sk.eyJ1IjoiYWJ1bXViYXJhay1kZXYiLCJhIjoiY2xkd3cwdTZyMGJtMjN0cnhlazJ0bmJwaiJ9.0d0VATeVvoEaoo5Wv0jALg'
             }
         }
         google()
