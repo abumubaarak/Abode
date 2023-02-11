@@ -1,5 +1,4 @@
 import { FontAwesome } from '@expo/vector-icons'
-import { appleAuth } from '@invertase/react-native-apple-authentication'
 import auth from "@react-native-firebase/auth"
 import { GoogleSignin } from "@react-native-google-signin/google-signin"
 import { useNavigation } from "@react-navigation/native"
@@ -27,12 +26,6 @@ export const AuthenticationScreen = observer(function AuthenticationScreen() {
     }
   }, [auth().currentUser?.uid])
 
-  useEffect(() => {
-    // onCredentialRevoked returns a function that will remove the event listener. useEffect will call this function when the component unmounts
-    return appleAuth.onCredentialRevoked(async () => {
-      console.warn('If this function executes, User Credentials have been Revoked');
-    });
-  }, []);
 
   const continueWithGoogle = () => {
     setLoading(true)
