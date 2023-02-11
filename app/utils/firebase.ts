@@ -52,10 +52,10 @@ export async function onAppleButtonPress() {
   console.log(displayName)
   return auth().signInWithCredential(appleCredential).then(() => createUser("apple", displayName));
 }
-
-export const createUser = (type: string, name: string = auth().currentUser.displayName) => {
+export const createUser = async (type: string, name: string = auth().currentUser.displayName) => {
   const document = firestore().collection(USERS).doc(auth().currentUser.uid)
-  if (!document.id) {
+  const user = await document.get();
+  if (!user.exists) {
     document.set({
       displayName: type === "google" ? auth().currentUser.displayName : name,
       email: auth().currentUser.email,
