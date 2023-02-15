@@ -35,7 +35,7 @@ const $closeIcon: ViewStyle = {
 const $closeView: ViewStyle = {
   height: 45,
   width: 45,
-  backgroundColor: colors?.lightgrey,
+  backgroundColor: colors?.white,
   borderRadius: 100,
   justifyContent: "center",
   alignItems: "center",

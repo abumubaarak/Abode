@@ -6,7 +6,7 @@ import {
   TextStyle,
   TouchableOpacity,
   View,
-  ViewStyle,
+  ViewStyle
 } from "react-native"
 import { isRTL, translate } from "../i18n"
 import { colors, spacing, typography } from "../theme"
@@ -238,7 +238,6 @@ const $inputWrapperStyle: ViewStyle = {
   alignItems: "flex-start",
   borderWidth: 1,
   borderRadius: 4,
-  backgroundColor: colors.palette.neutral200,
   borderColor: colors.palette.neutral400,
   overflow: "hidden",
 }

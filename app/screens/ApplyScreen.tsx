@@ -103,13 +103,14 @@ const $closeIcon: ViewStyle = {
 }
 const $contentContainer: ViewStyle = {
   flexBasis: "90%",
+  backgroundColor: colors.white,
+
   paddingHorizontal: spacing.medium,
 }
 const $buttonContainer: ViewStyle = {
   paddingHorizontal: spacing.medium,
   justifyContent: "center",
   flexBasis: "12%",
-  backgroundColor: colors.white,
 }
 const $buttonLabel: TextStyle = {
   color: "white",
@@ -146,6 +147,7 @@ const $landlordProfileContainer: ViewStyle = {
   flexDirection: "row",
   alignItems: "center",
   marginTop: 20,
+
   paddingBottom: spacing.medium,
 }
 const $nameContainer: ViewStyle = {
@@ -163,6 +165,8 @@ const $avatar: ViewStyle = {
 }
 const $content: ViewStyle = {
   marginTop: 30,
+  backgroundColor: colors.white,
+
 }
 
 const $avatarLabel: TextStyle = {
@@ -186,5 +190,7 @@ const $labelTag: TextStyle = {
 const $requestField: TextStyle = {
   height: 150,
   paddingVertical: 10,
+  backgroundColor: colors.white,
+
   fontFamily: typography.primary.light,
 }
