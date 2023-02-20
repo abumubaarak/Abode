@@ -33,7 +33,7 @@ export const SearchBar = observer(function SearchBar(props: SearchBarProps) {
 
   return (
     <View style={$container}>
-      <Pressable style={$searchContainer} onPress={() => navigate("AutoComplete")}>
+      <Pressable style={$searchContainer} testID="search-box" onPress={() => navigate("AutoComplete")}>
         <View style={$search}>
           <Pressable onPress={() => goBack()}>
             {Platform.OS === "ios" ? (
