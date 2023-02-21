@@ -110,8 +110,10 @@ export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "Lis
             renderItem={({ item }) => (
               <FastImage
                 style={$slidingImage}
+                testID="swipe"
                 source={{
                   uri: item,
+
                   priority: FastImage.priority.normal,
                 }}
                 resizeMode={FastImage.resizeMode.cover}
@@ -141,7 +143,7 @@ export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "Lis
 
           <View style={$propertyInfoContainer}>
             <View>
-              <Text text={document?.name} preset="subheading" style={$propertyNameLabel} />
+              <Text testID="listing-title" text={document?.name} preset="subheading" style={$propertyNameLabel} />
               <View style={$tagContainer}>
                 <ListingTag
                   label={`${document?.avaliableBedroom} Bedroom`}
@@ -166,7 +168,7 @@ export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "Lis
                   }
                 />
               </View>
-              <View style={$priceContainer}>
+              <View testID="listing-amount" style={$priceContainer}>
                 <Text text={`${currencyFormat(document?.cost)}`} style={$priceLabel} />
                 <Text style={$pricePer} text="/month" />
               </View>
