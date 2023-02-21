@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite"
-import React, { FC } from "react"
+import React, { FC, useEffect } from "react"
 import {
   Dimensions,
   ImageBackground,
@@ -20,11 +20,10 @@ const HORIZONTAL_MARGIN = 15
 
 export const SearchScreen: FC<HomeTabScreenProps<"Search">> = observer(function SearchScreen() {
   const { getCollection, data, isLoading } = useFirestore()
-  // const { data, isLoading, error } = useFirestoreQuery(["Property"], ref);
 
-  // useEffect(() => {
-  //   getCollection("Property")
-  // }, [])
+  useEffect(() => {
+    getCollection("Property")
+  }, [])
 
   const sliderWidth = Dimensions.get("window").width
   const itemWidth = sliderWidth - 100 + HORIZONTAL_MARGIN * 2
@@ -39,7 +38,7 @@ export const SearchScreen: FC<HomeTabScreenProps<"Search">> = observer(function 
     <Screen style={$root} preset="auto">
       <ImageBackground style={$banner} resizeMode="cover" source={bannerTop}>
         <Text text={`Discover a place \nyou'll love to live`} testID="discover-text" style={$bannerLabel} />
-        <Pressable onPress={() => navigate("AutoComplete")}>
+        <Pressable onPress={() => navigate("AutoComplete")} testID="search">
           <View style={$searchContainer}>
             <View style={$search}>
               <Icon icon="search" style={$searchIcon} />

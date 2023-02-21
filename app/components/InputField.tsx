@@ -29,6 +29,7 @@ export const InputField = observer(function PropertyField(props: PropertyFieldPr
     <TextField
       value={value}
       label={label}
+      testID="search-imput"
       onFocus={() => setFocus(true)}
       onBlur={() => setFocus(false)}
       RightAccessory={() => floatingLabel && <Text text="ft²" style={$textField} />}
