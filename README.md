@@ -32,6 +32,7 @@
 - React Hook Form
 - Moti
 - FlashList
+- Detox
 
 
 
