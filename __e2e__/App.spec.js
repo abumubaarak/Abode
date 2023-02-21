@@ -17,4 +17,13 @@ describe("Main", () => {
     await expect(element(by.id("search-box"))).toBeVisible()
     await expect(element(by.text("Berlin, Germany"))).toBeVisible()
   })
+
+  it("should render listing details screen", async () => {
+    await element(by.id("listing-card")).atIndex(0).tap()
+    await element(by.id('swipe')).atIndex(0).swipe('left');
+    await element(by.id('swipe')).atIndex(1).swipe('left');
+    await expect(element(by.id("listing-title"))).toBeVisible()
+    await expect(element(by.id("listing-amount"))).toBeVisible()
+
+  })
 })

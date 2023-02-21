@@ -25,7 +25,7 @@ export const ListingCard = observer(function ListingCard(props: ListingCardProps
   const { item } = props
   const data = item
   return (
-    <Pressable onPress={() => navigate("ListingDetails", { id: item.id })}>
+    <Pressable testID="listing-card" onPress={() => navigate("ListingDetails", { id: item.id })}>
       <Card
         preset="default"
         style={$container}
