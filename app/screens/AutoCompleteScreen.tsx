@@ -53,17 +53,9 @@ export const AutoCompleteScreen: FC<StackScreenProps<AppStackScreenProps, "AutoC
     }
 
     const handleSuggestion = (item: any) => {
-      // if (params.type === "city") {
       const country = item.context[item?.context?.length - 1]
-      //   const location = `${item?.geometry?.coordinates[0]} , ${item?.geometry?.coordinates[1]}`
       const city = `${item?.text}, ${country?.text}`
-      //   setCity(city, location, country?.short_code)
-      // } else {
-      //   const location = `${item?.geometry?.coordinates[0]} , ${item?.geometry?.coordinates[1]}`
-      //   setAddresss(item.place_name, location)
-      // }
       navigate("PropertySearch", { keyword: city })
-      // goBack()
     }
     useEffect(() => {
       const { city } = getValues()
