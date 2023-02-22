@@ -10,18 +10,19 @@ export interface CloseProps {
    * An optional style override useful for padding & margin.
    */
   style?: StyleProp<ViewStyle>
+  variant?: "white" | "black"
 }
 
 /**
  * Describe your component here
  */
 export const Close = observer(function Close(props: CloseProps) {
-  const { style } = props
+  const { style, variant } = props
 
   return (
     <View style={$closeIcon}>
-      <View style={$closeView}>
-        <Icon icon="x" onPress={() => goBack()} />
+      <View style={[$closeView, { backgroundColor: variant == "white" ? colors?.white : colors?.gray100 }]}>
+        <Icon icon="x" color="white" onPress={() => goBack()} />
       </View>
     </View>
   )
@@ -35,7 +36,6 @@ const $closeIcon: ViewStyle = {
 const $closeView: ViewStyle = {
   height: 45,
   width: 45,
-  backgroundColor: colors?.white,
   borderRadius: 100,
   justifyContent: "center",
   alignItems: "center",

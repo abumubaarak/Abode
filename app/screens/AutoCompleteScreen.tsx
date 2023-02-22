@@ -66,7 +66,7 @@ export const AutoCompleteScreen: FC<StackScreenProps<AppStackScreenProps, "AutoC
     return (
       <View style={$containerMain}>
         <View style={$container}>
-          <Close />
+          <Close variant="black" />
           <View style={$card}>
             <Controller
               control={control}
