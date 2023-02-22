@@ -12,6 +12,7 @@ import Carousel from "react-native-snap-carousel"
 import { Close, ListingTag, Text } from "../components"
 import { AppStackParamList, AppStackScreenProps } from "../navigators"
 import { colors, spacing, typography } from "../theme"
+import { currencyFormat } from "../utils"
 
 // REMOVE ME! ⬇️ This TS ignore will not be necessary after you've added the correct navigator param type
 // @ts-ignore
@@ -113,7 +114,7 @@ export const MapSearchScreen: FC<StackScreenProps<AppStackScreenProps, "MapSearc
                     </View>
 
                     <View style={$amountContainer}>
-                      <Text text={`$${item.cost}`} style={$amount} />
+                      <Text text={`${currencyFormat(item.cost)}`} style={$amount} />
                       <Text text="/month" style={$month} />
                     </View>
                   </View>
