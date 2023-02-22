@@ -16,7 +16,7 @@ import useFirestore from "../hooks/useFirestore"
 import useUser from "../hooks/useUser"
 import { AppStackParamList, AppStackScreenProps, navigate } from "../navigators"
 import { colors, typography } from "../theme"
-import { currencyFormat } from "../utils"
+import { capitalizeFirstLetter } from "../utils"
 
 import { addWishlist, PROPERTY, removeWishlist, REQUEST, USERS, WISHLISTS } from "../utils/firebase"
 
@@ -169,7 +169,7 @@ export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "Lis
                 />
               </View>
               <View testID="listing-amount" style={$priceContainer}>
-                <Text text={`${currencyFormat(document?.cost)}`} style={$priceLabel} />
+                <Text text={`${(document?.cost)}`} style={$priceLabel} />
                 <Text style={$pricePer} text="/month" />
               </View>
             </View>
@@ -181,7 +181,7 @@ export const ListingDetailsScreen: FC<StackScreenProps<AppStackScreenProps, "Lis
             <LisitingFeaturesTag item={document?.amenities} type="amenities" />
 
             <Text text="Property Type" style={$label} />
-            <Text style={$propertyInfoLabel} text={document?.propertyType} />
+            <Text style={$propertyInfoLabel} text={capitalizeFirstLetter(document?.propertyType)} />
 
             <Text text="Room Size" style={$label} />
             <Text style={$propertyInfoLabel} text={`${document?.roomSize} sqft`} />

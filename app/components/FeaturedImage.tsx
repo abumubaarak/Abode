@@ -19,16 +19,16 @@ export interface FeaturedImageProps {
    */
   style?: StyleProp<ViewStyle>
   image: ImageSourcePropType
-  text: string
+  keyword: string
 }
 
 export const FeaturedImage = observer(function FeaturedImage(props: FeaturedImageProps) {
-  const { image, text } = props
-
+  const { image, keyword } = props
+  const title = keyword.split(",")[0]
   return (
     <ImageBackground source={image} imageStyle={$imageContainerStyle} style={$containerStyle}>
-      <Pressable onPress={() => navigate("PropertySearch", { keyword: text })}>
-        <Text text={text} preset="subheading" style={$text} />
+      <Pressable onPress={() => navigate("PropertySearch", { keyword })}>
+        <Text text={title} preset="subheading" style={$text} />
       </Pressable>
     </ImageBackground>
   )

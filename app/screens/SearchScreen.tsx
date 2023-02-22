@@ -72,12 +72,12 @@ export const SearchScreen: FC<HomeTabScreenProps<"Search">> = observer(function 
         <Text text="Featured cities" style={[$label, { paddingTop: 36 }]} />
 
         <View style={$featuredContainer}>
-          <FeaturedImage image={dubai} text="Dubai" />
-          <FeaturedImage image={london} text="London" />
+          <FeaturedImage image={dubai} keyword="Dubai, United Arab Emirates" />
+          <FeaturedImage image={london} keyword="London, United Kingdom" />
         </View>
         <View style={[$featuredContainer, { marginTop: 10 }]}>
-          <FeaturedImage image={paris} text="Paris" />
-          <FeaturedImage image={berlin} text="Berlin" />
+          <FeaturedImage image={paris} keyword="Paris, France" />
+          <FeaturedImage image={berlin} keyword="Berlin, Germany" />
         </View>
       </View>
     </Screen>
