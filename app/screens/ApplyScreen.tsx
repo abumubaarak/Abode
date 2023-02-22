@@ -4,10 +4,11 @@ import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import React, { FC, useEffect, useState } from "react"
 import { TextStyle, View, ViewStyle } from "react-native"
+import { useToast } from "react-native-toast-notifications"
 import { Button, Icon, Screen, Text, TextField } from "../components"
 import { Loader } from "../components/Loader"
 import useFirestore from "../hooks/useFirestore"
-import { AppStackParamList, AppStackScreenProps } from "../navigators"
+import { AppStackParamList, AppStackScreenProps, navigate } from "../navigators"
 import { colors, spacing, typography } from "../theme"
 import { avatarName } from "../utils"
 import { USERS } from "../utils/firebase"
@@ -29,6 +30,7 @@ export const ApplyScreen: FC<StackScreenProps<AppStackScreenProps, "Apply">> = o
     const { getDocument: getLandlord, document: landlord, isLoading } = useFirestore()
     const { applyRent, isLoading: applyRentIsLoading, document: data } = useFirestore()
     const [message, setMessage] = useState<string>(`I am interested in ${pName} , ${address}.`)
+    const toast = useToast();
 
     useEffect(() => {
       getLandlord(USERS, lid)
@@ -37,7 +39,12 @@ export const ApplyScreen: FC<StackScreenProps<AppStackScreenProps, "Apply">> = o
     useEffect(() => {
       if (data?.id) {
         hasApplied(true)
-        navigation.goBack()
+        toast.show("Request sent to landlord.", {
+          type: "success",
+          placement: "top",
+        })
+        navigate("Search")
+
       }
     }, [applyRentIsLoading])
 

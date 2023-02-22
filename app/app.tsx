@@ -27,7 +27,7 @@ import { useInitialRootStore } from "./models";
 import { AppNavigator, useNavigationPersistence } from "./navigators";
 import { ErrorBoundary } from "./screens/ErrorScreen/ErrorBoundary";
 import { setupReactotron } from "./services/reactotron";
-import { customFontsToLoad, typography } from "./theme";
+import { colors, customFontsToLoad, typography } from "./theme";
 import * as storage from "./utils/storage";
 
 // Set up Reactotron, which is a free desktop app for inspecting and debugging
@@ -114,7 +114,8 @@ function App(props: AppProps) {
         <StripeProvider publishableKey={Config.PUBLISHABLE_KEY}>
           <ToastProvider offsetTop={40}
             textStyle={{ fontFamily: typography.primary.normal, paddingRight: 15 }}
-
+            successColor={colors.palette.secondary100}
+            successIcon={<AntDesign name="check" size={24} color="white" />}
             dangerIcon={<AntDesign name="infocirlceo" size={24} color="white" />}
           >
             <BottomSheetModalProvider>
