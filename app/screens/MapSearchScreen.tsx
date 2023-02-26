@@ -40,7 +40,7 @@ export const MapSearchScreen: FC<StackScreenProps<AppStackScreenProps, "MapSearc
           styleURL={MapboxGL.StyleURL.Street}
           style={$map}
         >
-          <Close />
+          <Close variant="white" />
 
           <MapboxGL.Camera
             animationMode="flyTo"

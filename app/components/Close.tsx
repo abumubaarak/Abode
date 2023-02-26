@@ -22,7 +22,7 @@ export const Close = observer(function Close(props: CloseProps) {
   return (
     <View style={$closeIcon}>
       <View style={[$closeView, { backgroundColor: variant == "white" ? colors?.white : colors?.gray100 }]}>
-        <Icon icon="x" color="white" onPress={() => goBack()} />
+        <Icon icon="x" color={variant == "white" ? colors?.black : colors?.white} onPress={() => goBack()} />
       </View>
     </View>
   )
