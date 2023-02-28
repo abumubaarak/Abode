@@ -114,7 +114,9 @@ const AppStack = observer(function AppStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Home" component={HomeNavigator} />
-      <Stack.Screen name="AutoComplete" component={AutoCompleteScreen} />
+      <Stack.Screen name="AutoComplete" component={AutoCompleteScreen} options={{
+        animation: "slide_from_right",
+      }} />
 
       <Stack.Screen
         name="MapSearch"

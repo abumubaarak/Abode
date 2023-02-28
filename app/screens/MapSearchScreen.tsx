@@ -10,7 +10,7 @@ import { Dimensions, Pressable, TextStyle, View, ViewStyle } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
 import Carousel from "react-native-snap-carousel"
 import { Close, ListingTag, Text } from "../components"
-import { AppStackParamList, AppStackScreenProps } from "../navigators"
+import { AppStackParamList, AppStackScreenProps, navigate } from "../navigators"
 import { colors, spacing, typography } from "../theme"
 import { currencyFormat } from "../utils"
 
@@ -29,38 +29,47 @@ export const MapSearchScreen: FC<StackScreenProps<AppStackScreenProps, "MapSearc
     const listings = params?.listings
     console.log(listings)
     const handleShowDetails = (item: FirebaseFirestoreTypes.DocumentData) => {
-      navigation.navigate("ListingDetails", { id: item?.id })
+      navigate("ListingDetails", { id: item?.id })
     }
     return (
-      <View style={$container}>
-        <MapboxGL.MapView
-          zoomEnabled={false}
-          pitchEnabled={false}
-          scrollEnabled={false}
-          styleURL={MapboxGL.StyleURL.Street}
-          style={$map}
-        >
+      <View style={{ flex: 1 }}>
+
+        <View style={$container}>
+
+          <MapboxGL.MapView
+            zoomEnabled={false}
+            pitchEnabled={false}
+            scrollEnabled={false}
+            styleURL={MapboxGL.StyleURL.Street}
+            style={$map}
+          >
+
+            <MapboxGL.Camera
+              animationMode="flyTo"
+              zoomLevel={17}
+              animationDuration={2000}
+              type="CameraStop"
+              centerCoordinate={listings[activeSlide]?.addresssLocation}
+            />
+
+            {listings.map((item, index) => (
+              <MapboxGL.PointAnnotation
+                id="point"
+                key={item?.addresssLocation}
+                coordinate={item?.addresssLocation}
+              >
+                <View style={$point}>
+                  <AntDesign name="home" size={20} color="white" />
+                </View>
+              </MapboxGL.PointAnnotation>
+            ))}
+          </MapboxGL.MapView>
+        </View>
+
+        <View style={{ top: 0, right: 0, position: "absolute" }}>
           <Close variant="white" />
-
-          <MapboxGL.Camera
-            animationMode="flyTo"
-            zoomLevel={17}
-            animationDuration={2000}
-            type="CameraStop"
-            centerCoordinate={listings[activeSlide]?.addresssLocation}
-          />
-          {listings.map((item, index) => (
-            <MapboxGL.PointAnnotation
-              id="point"
-              key={item?.addresssLocation}
-              coordinate={item?.addresssLocation}
-            >
-              <View style={$point}>
-                <AntDesign name="home" size={20} color="white" />
-              </View>
-            </MapboxGL.PointAnnotation>
-          ))}
-
+        </View>
+        <View style={{ bottom: 0, position: "absolute" }}>
           <Carousel
             vertical={false}
             sliderWidth={sliderWidth}
@@ -122,8 +131,11 @@ export const MapSearchScreen: FC<StackScreenProps<AppStackScreenProps, "MapSearc
               </Pressable>
             )}
           />
-        </MapboxGL.MapView>
+        </View>
+
+
       </View>
+
     )
   },
 )
