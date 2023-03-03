@@ -1,15 +1,14 @@
-import { FontAwesome } from '@expo/vector-icons'
 import auth from "@react-native-firebase/auth"
 import { GoogleSignin } from "@react-native-google-signin/google-signin"
 import { useNavigation } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
 
+import { FontAwesome } from "@expo/vector-icons"
 import React, { useEffect, useState } from "react"
 import { ActivityIndicator, ImageBackground, Platform, TextStyle, View, ViewStyle } from "react-native"
-import { Button, Close, Icon, Screen, Text } from "../components"
+import { Button, Close, Icon, Text } from "../components"
 import { colors, spacing, typography } from "../theme"
 import { onAppleButtonPress, onGoogleButtonPress } from "../utils/firebase"
-
 GoogleSignin.configure({
   scopes: ["https://www.googleapis.com/auth/drive.readonly"],
   webClientId: "980427352092-vaihpt46rgqge0vns0ctne7ql9qoajmt.apps.googleusercontent.com",
@@ -41,12 +40,10 @@ export const AuthenticationScreen = observer(function AuthenticationScreen() {
   }
 
   return (
-    <Screen statusBarStyle="light" style={$root}>
-      <View style={$topContainer}>
-        <ImageBackground resizeMode="cover" source={getStarted} style={$root} >
-          <Close />
-        </ImageBackground>
-      </View>
+    <View style={$root} >
+      <ImageBackground resizeMode="cover" source={getStarted} style={$root} >
+        <Close />
+      </ImageBackground>
       <View style={$bottomContainer}>
         <Text text={`Discover a place you'll \nlove to live`} preset="heading" style={$labelHeading} />
         <Text text="We are the solution for those of you who are looking for their next rent anywhere." preset="default" style={$labelSubHeading} />
@@ -94,7 +91,7 @@ export const AuthenticationScreen = observer(function AuthenticationScreen() {
 
         </View>
       </View>
-    </Screen>
+    </View>
 
   )
 })
@@ -119,15 +116,10 @@ const $authButton: ViewStyle = {
   borderRadius: 10,
 }
 
-const $topContainer: ViewStyle = {
-  flexBasis: "68%",
-  justifyContent: "center",
-}
 const $bottomContainer: ViewStyle = {
-  flexBasis: "47%",
   backgroundColor: "white",
   paddingTop: 25,
-  marginTop: -65,
+  marginTop: -25,
   paddingBottom: spacing.medium,
   paddingHorizontal: spacing.medium,
   borderTopLeftRadius: 30,
