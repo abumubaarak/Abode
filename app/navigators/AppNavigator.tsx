@@ -24,6 +24,7 @@ import Config from "../config"
 import {
   ApplyScreen,
   AuthenticationScreen,
+  DeleteAccountScreen,
   ListingDetailsScreen,
   MapSearchScreen,
   PropertySearchScreen,
@@ -63,6 +64,7 @@ export type AppStackParamList = {
   }
   PropertySearch: { keyword: string }
   Authentication: undefined
+  DeleteAccount: undefined
   ListingDetails: { id: string }
   Apply: {
     lid: string
@@ -129,6 +131,7 @@ const AppStack = observer(function AppStack() {
           animation: "slide_from_right",
         }}
       >
+        <Stack.Screen name="DeleteAccount" component={DeleteAccountScreen} options={{ headerShown: true, headerTitle: "Delete account" }} />
         <Stack.Screen
           name="ListingDetails"
           options={{

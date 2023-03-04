@@ -86,6 +86,12 @@ export const ProfileScreen: FC<HomeTabScreenProps<"Profile">> = observer(functio
         </Pressable>
       )}
 
+      <Pressable
+        onPress={() => navigate("DeleteAccount")}
+        style={[$card, { paddingLeft: 15, paddingHorizontal: 15 }]}
+      >
+        <Text text="Delete Account" style={$delete} />
+      </Pressable>
       <Pressable onPress={handleLogout}>
         <View style={$logoutContainer}>
           <Text text="Log out" style={$logout} />
@@ -155,6 +161,11 @@ const $logout: TextStyle = {
   fontSize: 18,
   color: colors.error,
   fontFamily: typography.primary.bold,
+}
+const $delete: TextStyle = {
+  fontSize: 15,
+  color: colors.black,
+  fontFamily: typography.primary.normal,
 }
 const $logoutContainer: ViewStyle = {
   alignItems: "center",
