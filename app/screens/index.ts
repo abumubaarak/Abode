@@ -13,3 +13,4 @@ export * from "./SingleSelectionScreen"
 export * from "./VerifyScreen"
 export * from "./WishlistScreen"
 
+export * from "./DeleteAccountScreen"
