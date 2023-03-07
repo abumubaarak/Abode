@@ -46,7 +46,7 @@
 
 
 ## Download the app📱
-- [App Store](https://www.a.com/us/)
+- [App Store](https://apps.apple.com/us/app/abode-tenant/id1668116173)
 - [Google Play](https://play.google.com/store/apps/details?id=com.tenant.abode) 
 - [Check out Abode for landlord app](https://github.com/abumubarak-dev/Abode-landlords)
 ---
